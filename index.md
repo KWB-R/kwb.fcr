@@ -5,8 +5,6 @@
 [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/kwb.fcr)]()
 [![R-Universe_Status_Badge](https://kwb-r.r-universe.dev/badges/kwb.fcr)](https://kwb-r.r-universe.dev/)
 
-# kwb.fcr
-
 Assessment of oxygen course in rivers. Assessment is aimed at
 reducing critical situations
 
@@ -29,9 +27,3 @@ if (! require("remotes")) {
 # Install KWB package 'kwb.fcr' from GitHub
 remotes::install_github("KWB-R/kwb.fcr")
 ```
-
-## Documentation
-
-Release: [https://kwb-r.github.io/kwb.fcr](https://kwb-r.github.io/kwb.fcr)
-
-Development: [https://kwb-r.github.io/kwb.fcr/dev](https://kwb-r.github.io/kwb.fcr/dev)
