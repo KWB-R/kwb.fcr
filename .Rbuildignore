@@ -7,3 +7,6 @@
 ^codecov\.yml$
 ^index\.md$
 ^README\.md$
+^kwb.fcr.Rproj$
+^.*\.Rproj$
+^\.Rproj\.user$
