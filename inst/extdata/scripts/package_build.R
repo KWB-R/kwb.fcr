@@ -48,8 +48,11 @@ usethis::use_vignette("documention")
 
 # ---------------------------------------------------------------------
 # in case package dependencies need to be added
-pkg_dependencies <- c() # insert package names
+pkg_dependencies <- c("dplyr", "readxl") # insert package names
 sapply(pkg_dependencies, usethis::use_package)
+
+# to write namespace
+devtools::document()
 
 
 ### R functions

@@ -21,4 +21,6 @@ Suggests:
     rmarkdown
 VignetteBuilder: knitr
 Imports: 
+    readxl,
+    dplyr,
     magrittr
