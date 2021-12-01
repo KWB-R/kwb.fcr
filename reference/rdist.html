@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Read environmental and pollutant variables — read_fcr_input • kwb.fcr</title>
+<title>Random samples from specified distribution — rdist • kwb.fcr</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,9 @@
 
 
 
-<meta property="og:title" content="Read environmental and pollutant variables — read_fcr_input" />
-<meta property="og:description" content="Reads Excel files with environmnetal proporties and substance coefficents." />
+<meta property="og:title" content="Random samples from specified distribution — rdist" />
+<meta property="og:description" content="Draw n samples from uniform, normal, truncated normal (-&amp;gt; positive only),
+lognormal or gamma distributions based on two input values" />
 
 
 
@@ -123,41 +124,58 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Read environmental and pollutant variables</h1>
-    <small class="dont-index">Source: <a href='https://github.com/KWB-R/kwb.fcr/blob/master/R/fcr_load_data.R'><code>R/fcr_load_data.R</code></a></small>
-    <div class="hidden name"><code>read_fcr_input.Rd</code></div>
+    <h1>Random samples from specified distribution</h1>
+    <small class="dont-index">Source: <a href='https://github.com/KWB-R/kwb.fcr/blob/master/R/utils.R'><code>R/utils.R</code></a></small>
+    <div class="hidden name"><code>rdist.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Reads Excel files with environmnetal proporties and substance coefficents.</p>
+    <p>Draw n samples from uniform, normal, truncated normal (-&gt; positive only),
+lognormal or gamma distributions based on two input values</p>
     </div>
 
-    <pre class="usage"><span class='fu'>read_fcr_input</span><span class='op'>(</span><span class='va'>path</span>, <span class='va'>pollutantName</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>rdist</span><span class='op'>(</span><span class='va'>value_1</span>, <span class='va'>value_2</span>, <span class='va'>n</span>, <span class='va'>dist_name</span>, shift <span class='op'>=</span> <span class='fl'>0</span>, seed <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>path</th>
-      <td><p>Path of both Excel files</p></td>
+      <th>value_1, value_2</th>
+      <td><p>Distribution parameters (see Details)</p></td>
     </tr>
     <tr>
-      <th>pollutantName</th>
-      <td><p>Name of Pollutant as in filename</p></td>
+      <th>n</th>
+      <td><p>Number of samples to be drawn</p></td>
+    </tr>
+    <tr>
+      <th>dist_name</th>
+      <td><p>Character vector specifying the Name of the distribution.
+Either "none", "uniform", "normal" "tnormal" (for truncated), "lognormal" or
+"gamma"</p></td>
+    </tr>
+    <tr>
+      <th>shift</th>
+      <td><p>An numeric value defining a subsequent shift of the distribution
+The default is 0 (-&gt; no shift)</p></td>
+    </tr>
+    <tr>
+      <th>seed</th>
+      <td><p>A numeric value to set the seed for random selection. The default
+is NULL -&gt; no seed</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>List of one row data frames.
-The length equals the number of non NA input variables. Data frames include
-information about distribution type, distribution parameters, site specific
-character and a unique variable ID</p>
+    <p>Numeric vector of length n with randomly drawn samples of the
+specified distribution</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Both input files must have the same path. The pollutant excel files must be
-named "'pollutantName'_sheet.xlsx". Furthermore, both excel tables must have
-the same number of columns and column names.</p>
+    <p>The values spefecified in valua_1 and value_2 represent min and max for
+"uniform", mean and standard deviation for "normal" and "tnormal", log
+mean and log standard devation for "lognormal" and shape and rate for
+"gamma", respectively. The shift value is especially interisting for lognormal
+or gamma distributions.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

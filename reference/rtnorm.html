@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Read environmental and pollutant variables — read_fcr_input • kwb.fcr</title>
+<title>Truncate normal distribution — rtnorm • kwb.fcr</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Read environmental and pollutant variables — read_fcr_input" />
-<meta property="og:description" content="Reads Excel files with environmnetal proporties and substance coefficents." />
+<meta property="og:title" content="Truncate normal distribution — rtnorm" />
+<meta property="og:description" content="Truncate normal distribution at a minimum or maximum value" />
 
 
 
@@ -123,41 +123,46 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Read environmental and pollutant variables</h1>
-    <small class="dont-index">Source: <a href='https://github.com/KWB-R/kwb.fcr/blob/master/R/fcr_load_data.R'><code>R/fcr_load_data.R</code></a></small>
-    <div class="hidden name"><code>read_fcr_input.Rd</code></div>
+    <h1>Truncate normal distribution</h1>
+    <small class="dont-index">Source: <a href='https://github.com/KWB-R/kwb.fcr/blob/master/R/utils.R'><code>R/utils.R</code></a></small>
+    <div class="hidden name"><code>rtnorm.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Reads Excel files with environmnetal proporties and substance coefficents.</p>
+    <p>Truncate normal distribution at a minimum or maximum value</p>
     </div>
 
-    <pre class="usage"><span class='fu'>read_fcr_input</span><span class='op'>(</span><span class='va'>path</span>, <span class='va'>pollutantName</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>rtnorm</span><span class='op'>(</span><span class='va'>n</span>, <span class='va'>mean</span>, <span class='va'>sd</span>, a <span class='op'>=</span> <span class='op'>-</span><span class='cn'>Inf</span>, b <span class='op'>=</span> <span class='cn'>Inf</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>path</th>
-      <td><p>Path of both Excel files</p></td>
+      <th>n</th>
+      <td><p>Number of samples to be drawn</p></td>
     </tr>
     <tr>
-      <th>pollutantName</th>
-      <td><p>Name of Pollutant as in filename</p></td>
+      <th>mean</th>
+      <td><p>Mean value of normal distribution</p></td>
+    </tr>
+    <tr>
+      <th>sd</th>
+      <td><p>Standard deviation of Normal distribution</p></td>
+    </tr>
+    <tr>
+      <th>a</th>
+      <td><p>Minimum of distribution (Default is -Inf)</p></td>
+    </tr>
+    <tr>
+      <th>b</th>
+      <td><p>Maximum of distribution (Default is Inf)</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>List of one row data frames.
-The length equals the number of non NA input variables. Data frames include
-information about distribution type, distribution parameters, site specific
-character and a unique variable ID</p>
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>Both input files must have the same path. The pollutant excel files must be
-named "'pollutantName'_sheet.xlsx". Furthermore, both excel tables must have
-the same number of columns and column names.</p>
+    <p>numeric vector of length n with randomly drawn numbers of the
+truncated normal distribution</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
