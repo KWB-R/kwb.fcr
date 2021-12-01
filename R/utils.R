@@ -22,16 +22,24 @@ rtnorm <- function(
         mean = mean, sd = sd)
 }
 
-#' Random Samples from Spcified Distribution
+#' Random samples from specified distribution
 #'
 #' Draw n samples from uniform, normal, truncated normal (-> positive only),
 #' lognormal or gamma distributions based on two input values
 #'
-#' @param value_1,value_2 Numeric value (see Details)
+#' The values spefecified in valua_1 and value_2 represent min and max for
+#' "uniform", mean and standard deviation for "normal" and "tnormal", log
+#' mean and log standard devation for "lognormal" and shape and rate for
+#' "gamma", respectively. The shift value is especially interisting for lognormal
+#' or gamma distributions.
+#'
+#' @param value_1,value_2 Distribution parameters (see Details)
 #' @param n Number of samples to be drawn
 #' @param dist_name Character vector specifying the Name of the distribution.
 #' Either "none", "uniform", "normal" "tnormal" (for truncated), "lognormal" or
 #' "gamma"
+#' @param shift An numeric value defining a subsequent shift of the distribution
+#' The default is 0 (-> no shift)
 #' @param seed A numeric value to set the seed for random selection. The default
 #' is NULL -> no seed
 #'
@@ -41,7 +49,7 @@ rtnorm <- function(
 #' @export
 #'
 rdist <- function(
-  value_1, value_2, n, dist_name, seed = NULL
+  value_1, value_2, n, dist_name, shift = 0, seed = NULL
 ){
   set.seed(seed)
   if(dist_name == "none"){
@@ -59,4 +67,7 @@ rdist <- function(
   }
   # re-initialize seed -> no seed
   set.seed(NULL)
+  v_out + shift
 }
+
+

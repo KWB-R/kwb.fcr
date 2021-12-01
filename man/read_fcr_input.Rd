@@ -12,12 +12,16 @@ read_fcr_input(path, pollutantName)
 \item{pollutantName}{Name of Pollutant as in filename}
 }
 \value{
-List of 2 tables for environment and pollutant characterstics
+List of one row data frames.
+The length equals the number of non NA input variables. Data frames include
+information about distribution type, distribution parameters, site specific
+character and a unique variable ID
 }
 \description{
 Reads Excel files with environmnetal proporties and substance coefficents.
 }
 \details{
-Both input files must have the same path. The pollutant excel files name must
-be "'pollutantName'_sheet.xlsc".
+Both input files must have the same path. The pollutant excel files must be
+named "'pollutantName'_sheet.xlsx". Furthermore, both excel tables must have
+the same number of columns and column names.
 }
