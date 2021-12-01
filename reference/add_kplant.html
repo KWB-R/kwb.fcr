@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Function reference • kwb.fcr</title>
+<title>Calculate plant uptake rate — add_kplant • kwb.fcr</title>
 
 
 <!-- jquery -->
@@ -39,7 +39,8 @@
 
 
 
-<meta property="og:title" content="Function reference" />
+<meta property="og:title" content="Calculate plant uptake rate — add_kplant" />
+<meta property="og:description" content="Calculation is based on the FCR prepared Monte Carlo table" />
 
 
 
@@ -58,7 +59,7 @@
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    <div class="container template-reference-index">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -120,138 +121,34 @@
       </header>
 
 <div class="row">
-  <div class="contents col-md-9">
+  <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Reference</h1>
+    <h1>Calculate plant uptake rate</h1>
+    <small class="dont-index">Source: <a href='https://github.com/KWB-R/kwb.fcr/blob/master/R/fcr_add_variables.R'><code>R/fcr_add_variables.R</code></a></small>
+    <div class="hidden name"><code>add_kplant.Rd</code></div>
     </div>
 
-    <table class="ref-index">
+    <div class="ref-description">
+    <p>Calculation is based on the FCR prepared Monte Carlo table</p>
+    </div>
 
-    <colgroup>
-      
-      <col class="alias" />
-      <col class="title" />
-    </colgroup>
+    <pre class="usage"><span class='fu'>add_kplant</span><span class='op'>(</span><span class='va'>p</span><span class='op'>)</span></pre>
 
-    <tbody>
-      <tr>
-        <th colspan="2">
-          <h2 id="section-all-functions" class="hasAnchor"><a href="#section-all-functions" class="anchor"></a>All functions</h2>
-          <p class="section-desc"></p>
-        </th>
-      </tr>
-      
-      
-    </tbody><tbody>
-      
-      
-      <tr>
-        
-        <td>
-          <p><code><a href="BCF_regression.html">BCF_regression()</a></code> </p>
-        </td>
-        <td><p>Estimate the bio concentration factor in two different ways</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="Kd_regression.html">Kd_regression()</a></code> </p>
-        </td>
-        <td><p>Estimate the soil sorption coefficient in two different ways</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="add_AirWater.html">add_AirWater()</a></code> </p>
-        </td>
-        <td><p>Estimate Air-Water partition coefficient</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="add_Henry.html">add_Henry()</a></code> </p>
-        </td>
-        <td><p>Estimate Henry Coefficient</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="add_Kd.html">add_Kd()</a></code> </p>
-        </td>
-        <td><p>Estimate Sorption Coefficient</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="add_SoilWater.html">add_SoilWater()</a></code> </p>
-        </td>
-        <td><p>Estimate Soil-Water partition coefficient</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="add_SoilWater_reverse.html">add_SoilWater_reverse()</a></code> </p>
-        </td>
-        <td><p>Estimate Soil-Water partition coefficient starting from infitrlation rate</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="add_bcf.html">add_bcf()</a></code> </p>
-        </td>
-        <td><p>Estimate Bio concentration factor</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="add_kleach.html">add_kleach()</a></code> </p>
-        </td>
-        <td><p>Calculate infiltration rate</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="add_kplant.html">add_kplant()</a></code> </p>
-        </td>
-        <td><p>Calculate plant uptake rate</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="add_kvolat.html">add_kvolat()</a></code> </p>
-        </td>
-        <td><p>Calculate volatisation rate</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="additional_substanc_info.html">additional_substanc_info()</a></code> </p>
-        </td>
-        <td><p>Read Additional pollutant information</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="create_mcs_input.html">create_mcs_input()</a></code> </p>
-        </td>
-        <td><p>List of Variables into Monte Carlo simulation input table</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="oneYear_matrix.html">oneYear_matrix()</a></code> </p>
-        </td>
-        <td><p>Creates a matrix with all Input Data for one year Concentration calculation</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="rdist.html">rdist()</a></code> </p>
-        </td>
-        <td><p>Random samples from specified distribution</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="read_fcr_input.html">read_fcr_input()</a></code> </p>
-        </td>
-        <td><p>Read environmental and pollutant variables</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="rtnorm.html">rtnorm()</a></code> </p>
-        </td>
-        <td><p>Truncate normal distribution</p></td>
-      </tr>
-    </tbody>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>p</th>
+      <td><p>Parameter table created with <code><a href='oneYear_matrix.html'>oneYear_matrix()</a></code></p></td>
+    </tr>
     </table>
-  </div>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>The Parameter table extended by a column for the partition
+coefficient. Unit is 1/d.</p>
+
+  </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
       <h2 data-toc-skip>Contents</h2>

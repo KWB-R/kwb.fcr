@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Function reference • kwb.fcr</title>
+<title>Estimate the soil sorption coefficient in two different ways — Kd_regression • kwb.fcr</title>
 
 
 <!-- jquery -->
@@ -39,7 +39,9 @@
 
 
 
-<meta property="og:title" content="Function reference" />
+<meta property="og:title" content="Estimate the soil sorption coefficient in two different ways — Kd_regression" />
+<meta property="og:description" content="Estimation via direct or indirect logarithmic linear regression including
+pH, organic carbon and soil concentration" />
 
 
 
@@ -58,7 +60,7 @@
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    <div class="container template-reference-index">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -120,138 +122,72 @@
       </header>
 
 <div class="row">
-  <div class="contents col-md-9">
+  <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Reference</h1>
+    <h1>Estimate the soil sorption coefficient in two different ways</h1>
+    <small class="dont-index">Source: <a href='https://github.com/KWB-R/kwb.fcr/blob/master/R/substance_properties.R'><code>R/substance_properties.R</code></a></small>
+    <div class="hidden name"><code>Kd_regression.Rd</code></div>
     </div>
 
-    <table class="ref-index">
+    <div class="ref-description">
+    <p>Estimation via direct or indirect logarithmic linear regression including
+pH, organic carbon and soil concentration</p>
+    </div>
 
-    <colgroup>
-      
-      <col class="alias" />
-      <col class="title" />
-    </colgroup>
+    <pre class="usage"><span class='fu'>Kd_regression</span><span class='op'>(</span>
+  constant <span class='op'>=</span> <span class='fl'>0</span>,
+  beta_ph <span class='op'>=</span> <span class='fl'>0</span>,
+  beta_org <span class='op'>=</span> <span class='fl'>0</span>,
+  beta_conc <span class='op'>=</span> <span class='fl'>0</span>,
+  regType <span class='op'>=</span> <span class='st'>"direct"</span>,
+  pH <span class='op'>=</span> <span class='fl'>7</span>,
+  org_c <span class='op'>=</span> <span class='fl'>20</span>,
+  conc <span class='op'>=</span> <span class='fl'>1</span>
+<span class='op'>)</span></pre>
 
-    <tbody>
-      <tr>
-        <th colspan="2">
-          <h2 id="section-all-functions" class="hasAnchor"><a href="#section-all-functions" class="anchor"></a>All functions</h2>
-          <p class="section-desc"></p>
-        </th>
-      </tr>
-      
-      
-    </tbody><tbody>
-      
-      
-      <tr>
-        
-        <td>
-          <p><code><a href="BCF_regression.html">BCF_regression()</a></code> </p>
-        </td>
-        <td><p>Estimate the bio concentration factor in two different ways</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="Kd_regression.html">Kd_regression()</a></code> </p>
-        </td>
-        <td><p>Estimate the soil sorption coefficient in two different ways</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="add_AirWater.html">add_AirWater()</a></code> </p>
-        </td>
-        <td><p>Estimate Air-Water partition coefficient</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="add_Henry.html">add_Henry()</a></code> </p>
-        </td>
-        <td><p>Estimate Henry Coefficient</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="add_Kd.html">add_Kd()</a></code> </p>
-        </td>
-        <td><p>Estimate Sorption Coefficient</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="add_SoilWater.html">add_SoilWater()</a></code> </p>
-        </td>
-        <td><p>Estimate Soil-Water partition coefficient</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="add_SoilWater_reverse.html">add_SoilWater_reverse()</a></code> </p>
-        </td>
-        <td><p>Estimate Soil-Water partition coefficient starting from infitrlation rate</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="add_bcf.html">add_bcf()</a></code> </p>
-        </td>
-        <td><p>Estimate Bio concentration factor</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="add_kleach.html">add_kleach()</a></code> </p>
-        </td>
-        <td><p>Calculate infiltration rate</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="add_kplant.html">add_kplant()</a></code> </p>
-        </td>
-        <td><p>Calculate plant uptake rate</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="add_kvolat.html">add_kvolat()</a></code> </p>
-        </td>
-        <td><p>Calculate volatisation rate</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="additional_substanc_info.html">additional_substanc_info()</a></code> </p>
-        </td>
-        <td><p>Read Additional pollutant information</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="create_mcs_input.html">create_mcs_input()</a></code> </p>
-        </td>
-        <td><p>List of Variables into Monte Carlo simulation input table</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="oneYear_matrix.html">oneYear_matrix()</a></code> </p>
-        </td>
-        <td><p>Creates a matrix with all Input Data for one year Concentration calculation</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="rdist.html">rdist()</a></code> </p>
-        </td>
-        <td><p>Random samples from specified distribution</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="read_fcr_input.html">read_fcr_input()</a></code> </p>
-        </td>
-        <td><p>Read environmental and pollutant variables</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="rtnorm.html">rtnorm()</a></code> </p>
-        </td>
-        <td><p>Truncate normal distribution</p></td>
-      </tr>
-    </tbody>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>constant</th>
+      <td><p>Log constant in linear Kd regression</p></td>
+    </tr>
+    <tr>
+      <th>beta_ph, beta_org, beta_conc</th>
+      <td><p>Log coefficient for pH, organic carbon and soil concentration
+in log-linear Kd regression</p></td>
+    </tr>
+    <tr>
+      <th>regType</th>
+      <td><p>Chacter specifying the way the K_d value is calculated. Either
+"direct" which means that the regression directly leads to the sorption
+coefficient or"indirect" which means the regression estimates a concentration
+in pore water and the sorption coefficient is subsequently be calculated by
+the quotient of soil and pore water concentration.</p></td>
+    </tr>
+    <tr>
+      <th>pH</th>
+      <td><p>pH value</p></td>
+    </tr>
+    <tr>
+      <th>org_c</th>
+      <td><p>Organic carbon content in percent.</p></td>
+    </tr>
+    <tr>
+      <th>conc</th>
+      <td><p>Soil concentration in mg/kg</p></td>
+    </tr>
     </table>
-  </div>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>A vector of sorption coefficients in L/kg</p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>The constant value, the regression parameter (beta) and the soil
+characteristics can be single numeric values or vectors of the same length.</p>
+
+  </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
       <h2 data-toc-skip>Contents</h2>
