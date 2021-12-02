@@ -21,4 +21,17 @@ p <- kwb.fcr::oneYear_matrix(dat = dat,
 
 p <- kwb.fcr::add_variables(p = p, info = info)
 
+c_out <- kwb.fcr::temp_c_profile(
+  conti_input = p[,"D_air"],
+  output_rate = p[,"k1"],
+  c_i = p[,"c_0"],
+  t_max = 180, t_res = 30, t_beg = 0)
+
+c_out2 <- kwb.fcr::temp_c_profile(
+  conti_input = p[,"D_air"],
+  output_rate = p[,"k2"],
+  c_i = c_out[nrow(c_out),],
+  t_max = 180, t_res = 30, t_beg = 180)
+
+rbind(c_out, c_out2)
 

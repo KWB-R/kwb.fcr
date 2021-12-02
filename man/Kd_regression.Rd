@@ -5,14 +5,14 @@
 \title{Estimate the soil sorption coefficient in two different ways}
 \usage{
 Kd_regression(
-  constant = 0,
-  beta_ph = 0,
-  beta_org = 0,
-  beta_conc = 0,
+  constant,
+  beta_ph,
+  beta_org,
+  beta_conc,
   regType = "direct",
-  pH = 7,
-  org_c = 20,
-  conc = 1
+  pH,
+  org_c,
+  conc
 )
 }
 \arguments{
