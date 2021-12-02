@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Estimate the soil sorption coefficient in two different ways — Kd_regression • kwb.fcr</title>
+<title>Calculation of the pollutant concentation in top soil — temp_c_profile • kwb.fcr</title>
 
 
 <!-- jquery -->
@@ -39,9 +39,8 @@
 
 
 
-<meta property="og:title" content="Estimate the soil sorption coefficient in two different ways — Kd_regression" />
-<meta property="og:description" content="Estimation via direct or indirect logarithmic linear regression including
-pH, organic carbon and soil concentration" />
+<meta property="og:title" content="Calculation of the pollutant concentation in top soil — temp_c_profile" />
+<meta property="og:description" content="Calculation of the pollutant concentation in top soil" />
 
 
 
@@ -124,68 +123,54 @@ pH, organic carbon and soil concentration" />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Estimate the soil sorption coefficient in two different ways</h1>
-    <small class="dont-index">Source: <a href='https://github.com/KWB-R/kwb.fcr/blob/master/R/substance_properties.R'><code>R/substance_properties.R</code></a></small>
-    <div class="hidden name"><code>Kd_regression.Rd</code></div>
+    <h1>Calculation of the pollutant concentation in top soil</h1>
+    <small class="dont-index">Source: <a href='https://github.com/KWB-R/kwb.fcr/blob/master/R/temporal_concentration_profile.R'><code>R/temporal_concentration_profile.R</code></a></small>
+    <div class="hidden name"><code>temp_c_profile.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Estimation via direct or indirect logarithmic linear regression including
-pH, organic carbon and soil concentration</p>
+    <p>Calculation of the pollutant concentation in top soil</p>
     </div>
 
-    <pre class="usage"><span class='fu'>Kd_regression</span><span class='op'>(</span>
-  <span class='va'>constant</span>,
-  <span class='va'>beta_ph</span>,
-  <span class='va'>beta_org</span>,
-  <span class='va'>beta_conc</span>,
-  regType <span class='op'>=</span> <span class='st'>"direct"</span>,
-  <span class='va'>pH</span>,
-  <span class='va'>org_c</span>,
-  <span class='va'>conc</span>
-<span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>temp_c_profile</span><span class='op'>(</span><span class='va'>conti_input</span>, <span class='va'>output_rate</span>, <span class='va'>c_i</span>, <span class='va'>t_max</span>, <span class='va'>t_res</span>, t_beg <span class='op'>=</span> <span class='fl'>0</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>constant</th>
-      <td><p>Log constant in linear Kd regression</p></td>
+      <th>conti_input</th>
+      <td><p>Numeric vector of atmospheric depositions in mg/kg topsoil</p></td>
     </tr>
     <tr>
-      <th>beta_ph, beta_org, beta_conc</th>
-      <td><p>Log coefficient for pH, organic carbon and soil concentration
-in log-linear Kd regression</p></td>
+      <th>output_rate</th>
+      <td><p>Numeric vector of absolute pollutant decay rates.</p></td>
     </tr>
     <tr>
-      <th>regType</th>
-      <td><p>Chacter specifying the way the K_d value is calculated. Either
-"direct" which means that the regression directly leads to the sorption
-coefficient or"indirect" which means the regression estimates a concentration
-in pore water and the sorption coefficient is subsequently be calculated by
-the quotient of soil and pore water concentration.</p></td>
+      <th>c_i</th>
+      <td><p>Numeric vector of inital concentrations in top soil</p></td>
     </tr>
     <tr>
-      <th>pH</th>
-      <td><p>pH value</p></td>
+      <th>t_max</th>
+      <td><p>Numeric value with the last considered timestep (unit
+depends on the unit of the decay rate)</p></td>
     </tr>
     <tr>
-      <th>org_c</th>
-      <td><p>Organic carbon content in percent.</p></td>
+      <th>t_res</th>
+      <td><p>Temporal resolution (numeric value) of the timesteps returned
+(unit depends on the unit of the decay rate)</p></td>
     </tr>
     <tr>
-      <th>conc</th>
-      <td><p>Soil concentration in mg/kg</p></td>
+      <th>t_beg</th>
+      <td><p>Numeric value of the first considered timestep. This value does
+not influence the calculation itself, it is only used for row names.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A vector of sorption coefficients in L/kg</p>
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>The constant value, the regression parameter (beta) and the soil
-characteristics can be single numeric values or vectors of the same length.</p>
+    <p>Matrix with columns corresponding to the length of the provided
+numeric vectors and rows depending on the defined timesteps with
+t_max and t_res</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
