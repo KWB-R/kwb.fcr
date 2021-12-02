@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Estimate bio concentration factor — add_bcf • kwb.fcr</title>
+<title>Query and complementation of input variables — add_variables • kwb.fcr</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Estimate bio concentration factor — add_bcf" />
-<meta property="og:description" content="Estimation is based on the FCR prepared Monte Carlo table" />
+<meta property="og:title" content="Query and complementation of input variables — add_variables" />
+<meta property="og:description" content="Query and complementation of input variables" />
 
 
 
@@ -123,35 +123,34 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Estimate bio concentration factor</h1>
+    <h1>Query and complementation of input variables</h1>
     <small class="dont-index">Source: <a href='https://github.com/KWB-R/kwb.fcr/blob/master/R/fcr_add_variables.R'><code>R/fcr_add_variables.R</code></a></small>
-    <div class="hidden name"><code>add_bcf.Rd</code></div>
+    <div class="hidden name"><code>add_variables.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Estimation is based on the FCR prepared Monte Carlo table</p>
+    <p>Query and complementation of input variables</p>
     </div>
 
-    <pre class="usage"><span class='fu'>add_bcf</span><span class='op'>(</span><span class='va'>p</span>, <span class='va'>sub_info</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>add_variables</span><span class='op'>(</span><span class='va'>p</span>, <span class='va'>info</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>p</th>
-      <td><p>Parameter table created with <code><a href='oneYear_matrix.html'>oneYear_matrix()</a></code></p></td>
+      <td><p>The input data table created with <code><a href='read_fcr_input.html'>read_fcr_input()</a></code></p></td>
     </tr>
     <tr>
-      <th>sub_info</th>
-      <td><p>The table containing additional substance information loaded
-with <code><a href='additional_substanc_info.html'>additional_substanc_info()</a></code></p></td>
+      <th>info</th>
+      <td><p>Additional input data information, created with
+<code><a href='additional_substanc_info.html'>additional_substanc_info()</a></code></p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>The Parameter table extended by a column for the bio concentration
-factor.</p>
+    <p>The table p exetended by new variable columns needed for the risk assessment</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

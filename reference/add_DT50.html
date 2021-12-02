@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Estimate bio concentration factor — add_bcf • kwb.fcr</title>
+<title>Estimate biological half-life — add_DT50 • kwb.fcr</title>
 
 
 <!-- jquery -->
@@ -39,7 +39,7 @@
 
 
 
-<meta property="og:title" content="Estimate bio concentration factor — add_bcf" />
+<meta property="og:title" content="Estimate biological half-life — add_DT50" />
 <meta property="og:description" content="Estimation is based on the FCR prepared Monte Carlo table" />
 
 
@@ -123,16 +123,16 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Estimate bio concentration factor</h1>
+    <h1>Estimate biological half-life</h1>
     <small class="dont-index">Source: <a href='https://github.com/KWB-R/kwb.fcr/blob/master/R/fcr_add_variables.R'><code>R/fcr_add_variables.R</code></a></small>
-    <div class="hidden name"><code>add_bcf.Rd</code></div>
+    <div class="hidden name"><code>add_DT50.Rd</code></div>
     </div>
 
     <div class="ref-description">
     <p>Estimation is based on the FCR prepared Monte Carlo table</p>
     </div>
 
-    <pre class="usage"><span class='fu'>add_bcf</span><span class='op'>(</span><span class='va'>p</span>, <span class='va'>sub_info</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>add_DT50</span><span class='op'>(</span><span class='va'>p</span>, <span class='va'>sub_info</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -152,6 +152,14 @@ with <code><a href='additional_substanc_info.html'>additional_substanc_info()</a
 
     <p>The Parameter table extended by a column for the bio concentration
 factor.</p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>The estimation is based on the K_d value of a substance according to the
+technical guidance document on risk assessment Part II (table 8). If there
+is a distribution of K_d values, the median K_d is used for the estimation.
+In this function there is no distinction between biodegradbility classes.
+All substances are assumend to be inherently biodegradable to encourage the
+user of further half-life research.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
