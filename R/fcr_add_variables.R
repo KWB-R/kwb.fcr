@@ -201,7 +201,7 @@ add_SoilWater_reverse <- function(p){
 add_bcf <- function(p, sub_info){
   BCF_regType <- sub_info$value[sub_info$info == "BCF_regType"]
 
-  cbind(p, "BCF" = kwb.fcr::Kd_regression(
+  cbind(p, "BCF" = Kd_regression(
     constant = p[,"const_BCF"],
     beta_ph = p[,"gamma_pH"],
     beta_org = p[,"gamma_oc"],

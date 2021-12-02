@@ -23,15 +23,14 @@
 #'
 #' @export
 Kd_regression <- function(
-  constant = 0, beta_ph = 0, beta_org = 0, beta_conc = 0, regType = "direct",
-  pH = 7, org_c = 20, conc = 1
+  constant, beta_ph, beta_org, beta_conc, regType = "direct", pH, org_c, conc
 ){
   reg_out <-
     beta_ph * pH + beta_org * log10(org_c) + beta_conc * log10(conc) + constant
   if(regType == "direct"){
     10^reg_out
   } else if(regType == "indirect"){
-    conc * 1000 / 10^reg_out
+    10^reg_out / conc
   }
 }
 
