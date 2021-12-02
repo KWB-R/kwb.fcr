@@ -17,10 +17,14 @@
 rtnorm <- function(
   n, mean, sd, a = -Inf, b = Inf
 ){
-  qnorm(p = runif(n = n,
-                  min = pnorm(q = a, mean = mean, sd = sd),
-                  max = pnorm(q = b, mean = mean, sd = sd)),
-        mean = mean, sd = sd)
+  # Helper function to avoid repetition of mean = mean, sd = sd
+  pn <- function(q) pnorm(q = q, mean = mean, sd = sd)
+
+  qnorm(
+    p = runif(n = n, min = pn(a), max = pn(b)),
+    mean = mean,
+    sd = sd
+  )
 }
 
 #' Random samples from specified distribution
