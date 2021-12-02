@@ -58,22 +58,18 @@ rdist <- function(
   value_1, value_2, n, dist_name, shift = 0, seed = NULL
 ){
   set.seed(seed)
-  if(dist_name == "none"){
-    v_out <- rep(value_1, n)
-  } else if(dist_name == "uniform"){
-    v_out <- runif(n = n,min = value_1,max = value_2)
-  } else if(dist_name == "normal"){
-    v_out <- rnorm(n = n, mean = value_1, sd = value_2)
-  } else if(dist_name == "tnormal"){
-    v_out <- rtnorm(n = n, mean = value_1, sd = value_2, a = 0)
-  } else if(dist_name == "lognormal"){
-    v_out <- rlnorm(n = n, meanlog = value_1, sdlog = value_2)
-  } else if(dist_name == "gamma"){
-    v_out <- rgamma(n = n, shape = value_1, rate = value_2)
-  }
+
+  v_out <- switch(
+    dist_name,
+    none = rep(value_1, n),
+    uniform = runif(n = n, min = value_1, max = value_2),
+    normal = rnorm(n = n, mean = value_1, sd = value_2),
+    tnormal = rtnorm(n = n, mean = value_1, sd = value_2, a = 0),
+    lognormal = rlnorm(n = n, meanlog = value_1, sdlog = value_2),
+    gamma = rgamma(n = n, shape = value_1, rate = value_2)
+  )
+
   # re-initialize seed -> no seed
   set.seed(NULL)
   v_out + shift
 }
-
-
