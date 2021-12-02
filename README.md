@@ -6,9 +6,11 @@
 [![R-Universe_Status_Badge](https://kwb-r.r-universe.dev/badges/kwb.fcr)](https://kwb-r.r-universe.dev/)
 
 # kwb.fcr
-
-Assessment of oxygen course in rivers. Assessment is aimed at
-reducing critical situations
+Fertilizer chemical risk assessment: This risk assessment is based on the TGD on risk assessment by the 
+  European Comission. Possible Endpoints are soil organisms, groundwater
+  organisms and human health via food consumption.Every variable can be entered 
+  as probability distribution to include uncertainties or site specific
+  variations.
 
 ## Installation
 
