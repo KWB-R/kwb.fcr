@@ -1,3 +1,81 @@
+#' Query and complementation of input variables
+#'
+#' @param p The input data table created with [read_fcr_input()]
+#' @param info Additional input data information, created with
+#' [additional_substanc_info()]
+#'
+#' @return
+#' The table p exetended by new variable columns needed for the risk assessment
+#'
+#' @export
+#'
+add_variables <- function(
+  p, info
+){
+  if(!("k_volat" %in% colnames(p) &
+       "k_leach" %in% colnames(p))){
+
+    if(!("K_H" %in% colnames(p))) {
+      p <- add_Henry(p = p)
+    }
+
+    if(!("K_AirWater" %in% colnames(p))) {
+      p <- add_AirWater(p = p)
+    }
+
+    if(!("K_SoilWater" %in% colnames(p))){
+      if(!("K_d" %in% colnames(p))){
+        p <- add_Kd(p = p, sub_info = info)
+      }
+      p <- add_SoilWater(p = p)
+    }
+  }
+
+  if(!("k_volat" %in% colnames(p))){
+    p <- add_kvolat(p = p)
+  }
+
+  if(!("k_leach" %in% colnames(p))){
+    p <- add_kleach(p = p)
+  }
+
+  if(!("K_SoilWater" %in% colnames(p))){
+    p <- add_SoilWater_reverse(p = p)
+  }
+
+  # k_plant
+  if(!("k_plant" %in% colnames(p))){
+    if(!("BCF" %in% colnames(p))){
+      p <- add_bcf(p = p, sub_info = info)
+    }
+    p <- add_kplant(p = p)
+  }
+
+  ###############################################################################
+  # k_bio
+  if(!("k_bio" %in% colnames(p))){
+    if(!("DT50" %in% colnames(p))){
+      p <- add_DT50(p = p)
+    }
+    p <- add_kbio(p = p)
+  }
+
+  # Overall k with and without k_plant
+  p <- cbind(p, "k1"=  p[,"k_bio"] + p[,"k_leach"] +
+               p[,"k_volat"] + p[,"k_plant"])
+  p <- cbind(p, "k2"=  p[,"k_bio"] + p[,"k_leach"] + p[,"k_volat"])
+
+  # Deposition
+  if(!("D_air" %in% colnames(p))){
+    p <- add_deposition(p = p)
+  }
+
+  if(!("PNEC_soil" %in% colnames(p))){
+    p <- add_PNEC_soil(p = p)
+  }
+  p
+}
+
 #' Estimate Sorption Coefficient
 #'
 #' Estimation is based on the FCR prepared Monte Carlo table
@@ -91,7 +169,7 @@ add_SoilWater <- function(p){
           p[,"f_solid"] * p[,"rho_solid"] * p[,"K_d"] / 1000)
 }
 
-#' Estimate Soil-Water partition coefficient starting from infitrlation rate
+#' Estimate Soil-Water partition coefficient starting from infiltration rate
 #'
 #' Estimation is based on the FCR prepared Monte Carlo table
 #'
@@ -107,7 +185,7 @@ add_SoilWater_reverse <- function(p){
           (p[,"k_leach"] * p[,"d"]))
 }
 
-#' Estimate Bio concentration factor
+#' Estimate bio concentration factor
 #'
 #' Estimation is based on the FCR prepared Monte Carlo table
 #'
@@ -115,7 +193,8 @@ add_SoilWater_reverse <- function(p){
 #' @param sub_info The table containing additional substance information loaded
 #' with [additional_substanc_info()]
 #'
-#' @return The Parameter table extended by a column for the sorption coefficient
+#' @return The Parameter table extended by a column for the bio concentration
+#' factor.
 #'
 #' @export
 #'
@@ -133,14 +212,50 @@ add_bcf <- function(p, sub_info){
     conc = p[,"c_0"]))
 }
 
-#' Calculate volatisation rate
+#' Estimate biological half-life
+#'
+#' Estimation is based on the FCR prepared Monte Carlo table
+#'
+#' The estimation is based on the K_d value of a substance according to the
+#' technical guidance document on risk assessment Part II (table 8). If there
+#' is a distribution of K_d values, the median K_d is used for the estimation.
+#' In this function there is no distinction between biodegradbility classes.
+#' All substances are assumend to be inherently biodegradable to encourage the
+#' user of further half-life research.
+#'
+#' @param p Parameter table created with [oneYear_matrix()]
+#' @param sub_info The table containing additional substance information loaded
+#' with [additional_substanc_info()]
+#'
+#' @return The Parameter table extended by a column for the bio concentration
+#' factor.
+#'
+#' @export
+#' @importFrom stats median
+#'
+add_DT50 <- function(p, sub_info){
+  dt50 <- NA
+
+  if(median(p[,"K_d"]) <= 10000){
+    dt50 <- 30000
+  }
+  if(median(p[,"K_d"])  <= 1000){
+    dt50 <- 3000
+  }
+  if(median(p[,"K_d"])  <= 100){
+    dt50 <- 300
+  }
+  cbind(p, "DT50" = dt50)
+}
+
+#' Calculate volatilization rate
 #'
 #' Calculation is based on the FCR prepared Monte Carlo table
 #'
 #' @param p Parameter table created with [oneYear_matrix()]
 #'
-#' @return The Parameter table extended by a column for the partition
-#' coefficient. Unit is 1/d.
+#' @return The Parameter table extended by a column for the volatilization rate.
+#' Unit is 1/d.
 #'
 #' @export
 #'
@@ -162,8 +277,8 @@ add_kvolat <- function(p){
 #'
 #' @param p Parameter table created with [oneYear_matrix()]
 #'
-#' @return The Parameter table extended by a column for the partition
-#' coefficient. Unit is 1/d.
+#' @return The Parameter table extended by a column for the infiltration rate.
+#' Unit is 1/d.
 #'
 #' @export
 #'
@@ -178,15 +293,63 @@ add_kleach <- function(p){
 #'
 #' @param p Parameter table created with [oneYear_matrix()]
 #'
-#' @return The Parameter table extended by a column for the partition
-#' coefficient. Unit is 1/d.
+#' @return The Parameter table extended by a column for the plant uptake rate.
+#' Unit is 1/d.
 #'
 #' @export
 #'
 add_kplant <- function(p){
-  cbind(p, "p$k_plant" = (p[,"BCF"] * p[,"Y"] * p[,"DM_plant"] / 100) /
+  cbind(p, "k_plant" = (p[,"BCF"] * p[,"Y"] * p[,"DM_plant"] / 100) /
           (p[,"t_g"] * p[,"d"] * p[,"rho_soil"]))
 }
+
+#' Calculate biodegredation rate
+#'
+#' Calculation is based on the FCR prepared Monte Carlo table
+#'
+#' @param p Parameter table created with [oneYear_matrix()]
+#'
+#' @return The Parameter table extended by a column for the biodegredation rate.
+#' Unit is 1/d.
+#'
+#' @export
+#'
+add_kbio <- function(p){
+  cbind(p, "k_bio" = log(2) / p[,"DT50"])
+}
+
+#' Calculate soil mass related daily atmospheric deposition
+#'
+#' Calculation is based on the FCR prepared Monte Carlo table
+#'
+#' @param p Parameter table created with [oneYear_matrix()]
+#'
+#' @return The Parameter table extended by a column for the atmospheric
+#' Deposition. Unit is mg/(kg * d).
+#'
+#' @export
+#'
+add_deposition <- function(p){
+  cbind(p, "D_air" =  p[,"D_air_tot"] / (p[,"d"] * p[,"rho_soil"]))
+}
+
+
+#' Estimate Predicted no-effect concentration for soil organisms
+#'
+#' Calculation is based on the FCR prepared Monte Carlo table
+#'
+#' @param p Parameter table created with [oneYear_matrix()]
+#'
+#' @return The Parameter table extended by a column for the Predicted no-effect
+#' concentration for soil organisms. Unit is mg/(kg Dry Matter).
+#'
+#' @export
+#'
+add_PNEC_soil <- function(p){
+  cbind(p, "PNEC_soil" =
+          (p[,"PNEC_water"] / 1000) * (p[,"K_oc"] * 0.0104 + 0.174))
+}
+
 
 
 

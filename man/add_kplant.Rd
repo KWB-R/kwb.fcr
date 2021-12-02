@@ -10,8 +10,8 @@ add_kplant(p)
 \item{p}{Parameter table created with \code{\link[=oneYear_matrix]{oneYear_matrix()}}}
 }
 \value{
-The Parameter table extended by a column for the partition
-coefficient. Unit is 1/d.
+The Parameter table extended by a column for the plant uptake rate.
+Unit is 1/d.
 }
 \description{
 Calculation is based on the FCR prepared Monte Carlo table

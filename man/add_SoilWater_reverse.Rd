@@ -2,7 +2,7 @@
 % Please edit documentation in R/fcr_add_variables.R
 \name{add_SoilWater_reverse}
 \alias{add_SoilWater_reverse}
-\title{Estimate Soil-Water partition coefficient starting from infitrlation rate}
+\title{Estimate Soil-Water partition coefficient starting from infiltration rate}
 \usage{
 add_SoilWater_reverse(p)
 }

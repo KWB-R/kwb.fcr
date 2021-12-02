@@ -12,6 +12,7 @@
 #' truncated normal distribution
 #'
 #' @export
+#' @importFrom stats pnorm qnorm
 #'
 rtnorm <- function(
   n, mean, sd, a = -Inf, b = Inf
@@ -47,6 +48,7 @@ rtnorm <- function(
 #' specified distribution
 #'
 #' @export
+#' @importFrom stats runif rnorm rlnorm rgamma
 #'
 rdist <- function(
   value_1, value_2, n, dist_name, shift = 0, seed = NULL
