@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Estimate Sorption Coefficient — add_Kd • kwb.fcr</title>
+<title>PECs for soil, porewater and human consumption over a long period of time — longterm_PEC • kwb.fcr</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,10 @@
 
 
 
-<meta property="og:title" content="Estimate Sorption Coefficient — add_Kd" />
-<meta property="og:description" content="Estimation is based on the FCR prepared Monte Carlo table" />
+<meta property="og:title" content="PECs for soil, porewater and human consumption over a long period of time — longterm_PEC" />
+<meta property="og:description" content="Based on the input data provided in Excel sheets, 3 different PECs are
+calculated. The number of years and number of agricultural fields with different
+properties (Number of Monte Carlo cycles) can be chosen." />
 
 
 
@@ -123,45 +125,87 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Estimate Sorption Coefficient</h1>
-    <small class="dont-index">Source: <a href='https://github.com/KWB-R/kwb.fcr/blob/master/R/fcr_add_variables.R'><code>R/fcr_add_variables.R</code></a></small>
-    <div class="hidden name"><code>add_Kd.Rd</code></div>
+    <h1>PECs for soil, porewater and human consumption over a long period of time</h1>
+    <small class="dont-index">Source: <a href='https://github.com/KWB-R/kwb.fcr/blob/master/R/fcr_PEC.R'><code>R/fcr_PEC.R</code></a></small>
+    <div class="hidden name"><code>longterm_PEC.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Estimation is based on the FCR prepared Monte Carlo table</p>
+    <p>Based on the input data provided in Excel sheets, 3 different PECs are
+calculated. The number of years and number of agricultural fields with different
+properties (Number of Monte Carlo cycles) can be chosen.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>add_Kd</span><span class='op'>(</span><span class='va'>p</span>, <span class='va'>sub_info</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>longterm_PEC</span><span class='op'>(</span>
+  <span class='va'>dat</span>,
+  <span class='va'>info</span>,
+  <span class='va'>years</span>,
+  <span class='va'>nFields</span>,
+  use_mixing_factor <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  food_only <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  growing_period <span class='op'>=</span> <span class='fl'>180</span>,
+  <span class='va'>t_res</span>,
+  return_variables <span class='op'>=</span> <span class='cn'>FALSE</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>p</th>
-      <td><p>Parameter table created with <code><a href='oneYear_matrix.html'>oneYear_matrix()</a></code>. Note: D_air variable
-must be available in p if K_d is estimated with linear regression.</p></td>
+      <th>dat</th>
+      <td><p>List with all the input variables. This list is produced by
+function <code><a href='read_fcr_input.html'>read_fcr_input()</a></code> from the Excel sheets.</p></td>
     </tr>
     <tr>
-      <th>sub_info</th>
-      <td><p>The table containing additional substance information loaded
+      <th>info</th>
+      <td><p>he table containing additional substance information loaded
 with <code><a href='additional_substanc_info.html'>additional_substanc_info()</a></code></p></td>
+    </tr>
+    <tr>
+      <th>years</th>
+      <td><p>Years of fertilizer application</p></td>
+    </tr>
+    <tr>
+      <th>nFields</th>
+      <td><p>Number of Monte Carlo cycles</p></td>
+    </tr>
+    <tr>
+      <th>use_mixing_factor</th>
+      <td><p>Not working yet! If TRUE, porewater is diluted by pollutant free
+groundwater for a more realistic estimation of risks in groundwater.
+However the TGD approach assumes porewater = groundwater for the assessment.</p></td>
+    </tr>
+    <tr>
+      <th>food_only</th>
+      <td><p>If TRUE, the predicted human consumption via food is
+multiplied by 2 to compensate the disregard of water consumption</p></td>
+    </tr>
+    <tr>
+      <th>growing_period</th>
+      <td><p>Numeric value specifiyng the number of days with plant
+growth</p></td>
+    </tr>
+    <tr>
+      <th>t_res</th>
+      <td><p>Temporal resolution to be returned in the output matrix
+(no effect on the calculation)</p></td>
+    </tr>
+    <tr>
+      <th>return_variables</th>
+      <td><p>Should the distributed input variables be returned?
+Note: this can lead to very large lists.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>The Parameter table extended by a column for the sorption coefficient</p>
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+    <p>List with</p><ol>
+<li><p>table for all PEC types per year,</p></li>
+<li><p>table for concentration course
+in top soil in the predefined temporal resolution,</p></li>
+<li><p>optional: list of distributed input variables for each year</p></li>
+</ol>
 
-    <p>Theoretically the initial concentration in soil can become negative if the
-pollutant concentration in fertilizes is negative. A negative concentration
-makes obviously no sense in a real situation. However, long-term impact is
-assessed, a broad concentration range of the pollutant also leads to more
-uncertain results. Negative concentrations in one year are averaged out.
-For the regression of the sorption coefficient, the concentration must be
-positive. Thus, negative values are increased to the concentration in
-top soil that would appear after one day of deposition.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

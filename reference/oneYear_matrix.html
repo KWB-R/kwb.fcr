@@ -134,7 +134,7 @@ based data input for the calculation of a yearly concentration dynamic." />
 based data input for the calculation of a yearly concentration dynamic.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>oneYear_matrix</span><span class='op'>(</span><span class='va'>dat</span>, <span class='va'>c_i</span>, <span class='va'>nFields</span>, firstYear <span class='op'>=</span> <span class='cn'>FALSE</span>, use_mixing_factor <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>oneYear_matrix</span><span class='op'>(</span><span class='va'>dat</span>, <span class='va'>c_i</span>, <span class='va'>nFields</span>, use_mixing_factor <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -154,10 +154,6 @@ function <code><a href='read_fcr_input.html'>read_fcr_input()</a></code> from th
 different agriculatural fields with different charactersitics.</p></td>
     </tr>
     <tr>
-      <th>firstYear</th>
-      <td><p>We will see</p></td>
-    </tr>
-    <tr>
       <th>use_mixing_factor</th>
       <td><p>If TRUE, a mixing factor for porewater dilution by
 unpolluted groundwater is used to get the Risk quotient for Groundwater. The
@@ -172,6 +168,10 @@ Document</p></td>
     <p>A Matrix with all available input data for the Assessment. The columns
 represent the input variabls, the rows correspond to the definied number of
 fields aka. number of Monte Carlo cycles.</p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>The pollutant concentration at t = 0 (c_0) already includes the fertilizer
+application</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
