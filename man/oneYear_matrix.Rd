@@ -4,7 +4,7 @@
 \alias{oneYear_matrix}
 \title{Creates a matrix with all Input Data for one year Concentration calculation}
 \usage{
-oneYear_matrix(dat, c_i, nFields, firstYear = FALSE, use_mixing_factor = FALSE)
+oneYear_matrix(dat, c_i, nFields, use_mixing_factor = FALSE)
 }
 \arguments{
 \item{dat}{List with all the input variables. This list is produced by
@@ -14,8 +14,6 @@ function \code{\link[=read_fcr_input]{read_fcr_input()}} from the Excel sheets.}
 
 \item{nFields}{The number Monte Carlo Simulations. This can be seen as
 different agriculatural fields with different charactersitics.}
-
-\item{firstYear}{We will see}
 
 \item{use_mixing_factor}{If TRUE, a mixing factor for porewater dilution by
 unpolluted groundwater is used to get the Risk quotient for Groundwater. The
@@ -31,4 +29,8 @@ fields aka. number of Monte Carlo cycles.
 \description{
 The information of the Excel input files are used to prepare a Monte Carlo
 based data input for the calculation of a yearly concentration dynamic.
+}
+\details{
+The pollutant concentration at t = 0 (c_0) already includes the fertilizer
+application
 }

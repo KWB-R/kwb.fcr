@@ -7,7 +7,8 @@
 add_Kd(p, sub_info)
 }
 \arguments{
-\item{p}{Parameter table created with \code{\link[=oneYear_matrix]{oneYear_matrix()}}}
+\item{p}{Parameter table created with \code{\link[=oneYear_matrix]{oneYear_matrix()}}. Note: D_air variable
+must be available in p if K_d is estimated with linear regression.}
 
 \item{sub_info}{The table containing additional substance information loaded
 with \code{\link[=additional_substanc_info]{additional_substanc_info()}}}
@@ -17,4 +18,14 @@ The Parameter table extended by a column for the sorption coefficient
 }
 \description{
 Estimation is based on the FCR prepared Monte Carlo table
+}
+\details{
+Theoretically the initial concentration in soil can become negative if the
+pollutant concentration in fertilizes is negative. A negative concentration
+makes obviously no sense in a real situation. However, long-term impact is
+assessed, a broad concentration range of the pollutant also leads to more
+uncertain results. Negative concentrations in one year are averaged out.
+For the regression of the sorption coefficient, the concentration must be
+positive. Thus, negative values are increased to the concentration in
+top soil that would appear after one day of deposition.
 }
