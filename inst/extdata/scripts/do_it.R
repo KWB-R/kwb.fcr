@@ -19,19 +19,18 @@ p <- kwb.fcr::oneYear_matrix(dat = dat,
                              firstYear = FALSE,
                              use_mixing_factor = FALSE)
 
-p <- kwb.fcr::add_variables(p = p, info = info)
+p <- kwb.fcr::add_variables(p = p,
+                            info = info)
 
-c_out <- kwb.fcr::temp_c_profile(
-  conti_input = p[,"D_air"],
-  output_rate = p[,"k1"],
-  c_i = p[,"c_0"],
-  t_max = 180, t_res = 30, t_beg = 0)
+# PECs in year i
+PEC_soil <- kwb.fcr::get_PEC_soil(p = p, d = 30)
+PEC_human <- kwb.fcr::get_PEC_human(p = p, d = 180, food_only = T)
+PEC_porewater <- kwb.fcr::get_PEC_porewater(p = p, d = 30)
 
-c_out2 <- kwb.fcr::temp_c_profile(
-  conti_input = p[,"D_air"],
-  output_rate = p[,"k2"],
-  c_i = c_out[nrow(c_out),],
-  t_max = 180, t_res = 30, t_beg = 180)
 
-rbind(c_out, c_out2)
-
+# temporal concentration course in year i
+output <- kwb.fcr::one_year(p = p,
+                            growing_period = 180,
+                            t_res = 10)
+# end concentration of year i
+c_i <- output[nrow(output),]
