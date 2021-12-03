@@ -22,16 +22,18 @@ temp_c_profile <- function(conti_input, output_rate, c_i, t_max, t_res, t_beg = 
   mat_out <- mapply(
     function(IN, OUT, START)
       IN / OUT - (IN / OUT - START) *
-      exp(-OUT * seq(from = 0, to = t_max, by = t_res)),
+      exp(-OUT * unique(c(seq(from = 0, to = t_max, by = t_res), t_max))),
     conti_input, output_rate, c_i)
 
   dimnames(mat_out) <-
-    list(paste0("t", seq(from = 0 + t_beg,
-                         to = t_max + t_beg,
-                         by = t_res)),
+    list(paste0("t",
+                unique(c(seq(from = 0, to = t_max,by = t_res), t_max) + t_beg)),
          paste0("n", 1:ncol(mat_out)))
+
   mat_out
 }
+
+
 
 
 
