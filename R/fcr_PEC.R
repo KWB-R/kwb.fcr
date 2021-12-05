@@ -105,6 +105,9 @@ longterm_PEC <- function(
   PEC$porewater <- do.call(rbind, PEC$porewater)
   c_course <- do.call(rbind, c_course)
 
+  if(use_mixing_factor){
+    PEC$groundwater <- t(t(PEC$porewater) / p[,"MF"])
+  }
 
   { # close status bar
     dev.off()
@@ -223,7 +226,7 @@ get_PEC_human <- function(p, d, food_only){
 #' @export
 #'
 get_PEC_porewater <- function(p, d){
-  get_PEC_soil(p = p, d = d) * p[,"rho_soil"] / p[,"K_SoilWater"]
+  PEC_soil <- get_PEC_soil(p = p, d = d) * p[,"rho_soil"] / p[,"K_SoilWater"]
 }
 
 

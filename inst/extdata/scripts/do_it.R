@@ -5,14 +5,14 @@ dat <- kwb.fcr::read_fcr_input(path = "inst/extdata/input", pollutantName = "cd"
 info <- kwb.fcr::additional_substanc_info(path = "inst/extdata/input", pollutantName = "cd")
 
 # for longterm application -----------------------------------------------------
-asd <- longterm_PEC(dat = dat,
+asd <- kwb.fcr::longterm_PEC(dat = dat,
                     info = info,
-                    years = 5,
-                    nFields = 100000,
+                    years = 100,
+                    nFields = 1000,
                     use_mixing_factor = FALSE,
                     food_only = TRUE,
                     growing_period = 180,
-                    t_res = 100, return_variables = T)
+                    t_res = 10, return_variables = T)
 
 # plot a site specific variable
 plot(x = asd$model_variables[[1]][,"rain"],
@@ -24,12 +24,14 @@ plot(x = asd$model_variables[[1]][,"c_fert"],
 
 asd <- longterm_PEC(dat = dat,
                     info = info,
-                    years = 20,
-                    nFields = 100000,
+                    years = 100,
+                    nFields = 10000,
                     use_mixing_factor = FALSE,
                     food_only = TRUE,
                     growing_period = 180,
-                    t_res = 100, return_variables = F)
+                    t_res = 200, return_variables = T)
+
+
 # for one single year ----------------------------------------------------------
 # prepare data
 # define initial concentration (only for the first year)
