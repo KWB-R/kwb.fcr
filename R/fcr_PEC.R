@@ -18,16 +18,20 @@
 #' @param growing_period Numeric value specifiyng the number of days with plant
 #' growth
 #' @param t_res Temporal resolution to be returned in the output matrix
-#' (no effect on the calculation)
-#' @param return_variables Should the distributed input variables be returned?
-#' Note: this can lead to very large lists.
+#' (no effect on the calculation). The default is 1 (every year) which can lead
+#' to a very large output matrix.
+#' @param traceBackVariables If TRUE, the variables of every simulation year are
+#' returned. Note: this can lead to very large lists.
 #'
 #' @return
 #' List with
 #' 1) table for all PEC types per year,
 #' 2) table for concentration course
 #' in top soil in the predefined temporal resolution,
-#' 3) optional: list of distributed input variables for each year
+#' 3) optional: If traceBackVariables TRUE: list of distributed input variables
+#' for each year, if traceBackVariables FALSE: Input variables of the first
+#' year including initial situations for human consumption and
+#' inital concentration in porewater
 #'
 #' @export
 #' @importFrom grDevices dev.new dev.off
@@ -35,7 +39,7 @@
 #'
 longterm_PEC <- function(
   dat, info, years, nFields, use_mixing_factor = FALSE, food_only = TRUE,
-  growing_period = 180, t_res, return_variables = FALSE
+  growing_period = 180, t_res = 1, traceBackVariables = FALSE
 ){
 
   c_i <- rdist(value_1 = dat$c_i$value_1, value_2 = dat$c_i$value_2,
@@ -62,7 +66,20 @@ longterm_PEC <- function(
       p <- oneYear_matrix(dat = dat, c_i = c_i, nFields = nFields,
                           use_mixing_factor = use_mixing_factor)
       p <- add_variables(p = p,info = info)
-      model_variables[[year]] <- p
+
+      # either all years variables or only first year
+      if(traceBackVariables){
+        model_variables[[year]] <- p
+      } else {
+        if(year == 1){
+          p <- cbind(
+            p, "c_water" =  p[,"c_i"] * p[,"rho_soil"] / p[,"K_SoilWater"])
+          p <- cbind(
+            p, "c_human" = p[,"c_i"] * p[,"BCF"] * p[,"f_resorbed"] *
+              p[,"m_crop"] / p[,"f_food"])
+          model_variables <- p
+        }
+      }
 
       PEC$soil[[year]] <-
         get_PEC_soil(p = p, d = 30)
@@ -74,7 +91,6 @@ longterm_PEC <- function(
       c_course[[year + 1]] <-
         one_year(p = p, growing_period = growing_period, t_res = t_res)
       c_i <- c_course[[year + 1]][nrow(c_course[[year + 1]]),]
-
 
     { # Update status bar
       status_new <- floor(year/years * 100)
@@ -111,11 +127,6 @@ longterm_PEC <- function(
 
   { # close status bar
     dev.off()
-  }
-
-
-  if(!return_variables){
-    model_variables <- "Set 'return_variables' to TRUE if needed"
   }
 
   list("PEC" = PEC,"c_course" = c_course, "model_variables" = model_variables)
@@ -201,9 +212,9 @@ get_PEC_soil <- function(p, d){
 get_PEC_human <- function(p, d, food_only){
   PEC_soil <- get_PEC_soil(p = p, d = d)
 
-  v_out <- PEC_soil * p[,"BCF"] * p[,"m_crop"] * p[,"f_resorbed"]
+  v_out <- PEC_soil * p[,"BCF"] * p[,"m_crop"] / 1000 * p[,"f_resorbed"] * 1000
   if(food_only){
-    v_out * 2
+    v_out / p[,"f_food"]
   } else {
     v_out
   }

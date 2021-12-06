@@ -12,8 +12,8 @@ longterm_PEC(
   use_mixing_factor = FALSE,
   food_only = TRUE,
   growing_period = 180,
-  t_res,
-  return_variables = FALSE
+  t_res = 1,
+  traceBackVariables = FALSE
 )
 }
 \arguments{
@@ -38,10 +38,11 @@ multiplied by 2 to compensate the disregard of water consumption}
 growth}
 
 \item{t_res}{Temporal resolution to be returned in the output matrix
-(no effect on the calculation)}
+(no effect on the calculation). The default is 1 (every year) which can lead
+to a very large output matrix.}
 
-\item{return_variables}{Should the distributed input variables be returned?
-Note: this can lead to very large lists.}
+\item{traceBackVariables}{If TRUE, the variables of every simulation year are
+returned. Note: this can lead to very large lists.}
 }
 \value{
 List with
@@ -49,7 +50,10 @@ List with
 \item table for all PEC types per year,
 \item table for concentration course
 in top soil in the predefined temporal resolution,
-\item optional: list of distributed input variables for each year
+\item optional: If traceBackVariables TRUE: list of distributed input variables
+for each year, if traceBackVariables FALSE: Input variables of the first
+year including initial situations for human consumption and
+inital concentration in porewater
 }
 }
 \description{
