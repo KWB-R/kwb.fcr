@@ -5,32 +5,36 @@ dat <- kwb.fcr::read_fcr_input(path = "inst/extdata/input", pollutantName = "cd"
 info <- kwb.fcr::additional_substanc_info(path = "inst/extdata/input", pollutantName = "cd")
 
 # for longterm application -----------------------------------------------------
-asd <- kwb.fcr::longterm_PEC(dat = dat,
+fcr_out <- kwb.fcr::longterm_PEC(dat = dat,
                     info = info,
                     years = 100,
                     nFields = 1000,
                     use_mixing_factor = FALSE,
                     food_only = TRUE,
                     growing_period = 180,
-                    t_res = 10, return_variables = T)
+                    t_res = 10,
+                    return_variables = TRUE)
 
-# plot a site specific variable
-plot(x = asd$model_variables[[1]][,"rain"],
-     y = asd$model_variables[[2]][,"rain"])
+dev.new()
+kwb.fcr::shadingPlot(
+  mat_xRow = fcr_out$PEC[["soil"]] / fcr_out$model_variables[,"PNEC_soil"],
+  ymin = 0, ymax = 1,
+  resolution = 0.01)
 
-# plot a site independent variable
-plot(x = asd$model_variables[[1]][,"c_fert"],
-     y = asd$model_variables[[2]][,"c_fert"])
+kwb.fcr::CumSumSoil(
+  v0 = fcr_out$model_variables[,"c_i"] / fcr_out$model_variables[,"PNEC_soil"],
+  v = fcr_out$PEC[["soil"]][100,] / fcr_out$model_variables[,"PNEC_soil"],
+  year_x = 100)
+kwb.fcr::CumSumSoil(
+  v0 = fcr_out$model_variables[,"c_water"] / fcr_out$model_variables[,"PNEC_water"],
+  v = fcr_out$PEC[["porewater"]][100,] / fcr_out$model_variables[,"PNEC_water"],
+  year_x = 100)
+kwb.fcr::CumSumSoil(
+  v0 = fcr_out$model_variables[,"c_human"] / fcr_out$model_variables[,"PNEC_human"],
+  v = fcr_out$PEC[["human"]][100,] / fcr_out$model_variables[,"PNEC_human"],
+  year_x = 100, xmax = 100)
 
-asd <- longterm_PEC(dat = dat,
-                    info = info,
-                    years = 100,
-                    nFields = 10000,
-                    use_mixing_factor = FALSE,
-                    food_only = TRUE,
-                    growing_period = 180,
-                    t_res = 200, return_variables = T)
-
+plot(density(x = fcr_out$PEC[["soil"]][100,]), lwd = 2)
 
 # for one single year ----------------------------------------------------------
 # prepare data
