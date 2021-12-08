@@ -13,7 +13,7 @@ fcr_out <- kwb.fcr::longterm_PEC(dat = dat,
                     food_only = TRUE,
                     growing_period = 180,
                     t_res = 10,
-                    return_variables = TRUE)
+                    traceBackVariables = FALSE)
 
 dev.new()
 kwb.fcr::shadingPlot(
