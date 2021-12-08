@@ -31,7 +31,7 @@ oneYear_matrix <- function(
   p <- create_mcs_input(data_list = dat, nFields = nFields)
 
   c_add <- # in mg / (kg * a)
-    (p[,"c_fert"] * p[,"p_app"]) / # in mg / (ha * a)
+    (p[,"c_fert"] * p[,"fert_app"]) / # in mg / (ha * a)
     (p[,"d"] * p[,"rho_soil"] * 10000)
 
   # sum of concentration from previous year and added pollutant
