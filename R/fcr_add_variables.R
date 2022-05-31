@@ -5,77 +5,58 @@
 #' [additional_substanc_info()]
 #'
 #' @return
-#' The table p exetended by new variable columns needed for the risk assessment
+#' The table p extended by new variable columns needed for the risk assessment
 #'
 #' @export
 #'
 add_variables <- function(
   p, info
 ){
+
+  # Helper function calling a column-adding function in case of missing column
+  call_if_missing <- function(data, column, fun, ...) {
+    if (column %in% names(data)) {
+      return(data)
+    }
+    # Call the function with the main argument data and further args if given
+    do.call(fun, c(list(data), list(...)))
+  }
+
   # Deposition (must be first because eventually needed for K_d regression)
-  if(!("D_air" %in% colnames(p))){
-    p <- add_deposition(p = p)
+  p <- call_if_missing(p, "D_air", add_deposition)
+
+  if(!("k_volat" %in% names(p) && "k_leach" %in% names(p))){
+
+    p <- call_if_missing(p, "K_H", add_Henry)
+    p <- call_if_missing(p, "K_AirWater", add_AirWater)
+    p <- call_if_missing(p, "K_SoilWater", function(p) {
+      add_SoilWater(p = call_if_missing(p, "K_d", add_Kd, sub_info = info))
+    })
   }
 
-  if(!("k_volat" %in% colnames(p) &
-       "k_leach" %in% colnames(p))){
-
-    if(!("K_H" %in% colnames(p))) {
-      p <- add_Henry(p = p)
-    }
-
-    if(!("K_AirWater" %in% colnames(p))) {
-      p <- add_AirWater(p = p)
-    }
-
-    if(!("K_SoilWater" %in% colnames(p))){
-      if(!("K_d" %in% colnames(p))){
-        p <- add_Kd(p = p, sub_info = info)
-      }
-      p <- add_SoilWater(p = p)
-    }
-  }
-
-  if(!("k_volat" %in% colnames(p))){
-    p <- add_kvolat(p = p)
-  }
-
-  if(!("k_leach" %in% colnames(p))){
-    p <- add_kleach(p = p)
-  }
-
-  if(!("K_SoilWater" %in% colnames(p))){
-    p <- add_SoilWater_reverse(p = p)
-  }
+  p <- call_if_missing(p, "k_volat", add_kvolat)
+  p <- call_if_missing(p, "k_leach", add_kleach)
+  p <- call_if_missing(p, "K_SoilWater", add_SoilWater_reverse)
 
   # k_plant
-  if(!("k_plant" %in% colnames(p))){
-    if(!("BCF" %in% colnames(p))){
-      p <- add_bcf(p = p, sub_info = info)
-    }
-    p <- add_kplant(p = p)
-  }
+  p <- call_if_missing(p, "k_plant", function(p) {
+    add_kplant(p = call_if_missing(p, "BCF", add_bcf, sub_info = info))
+  })
 
   ###############################################################################
   # k_bio
-  if(!("k_bio" %in% colnames(p))){
-    if(!("DT50" %in% colnames(p))){
-      p <- add_DT50(p = p)
-    }
-    p <- add_kbio(p = p)
-  }
+  p <- call_if_missing(p, "k_bio", function(p) {
+    add_kbio(p = call_if_missing(p, "DT50", add_DT50))
+  })
 
   # Overall k with and without k_plant
-  p <- cbind(p, "k1"=  p[,"k_bio"] + p[,"k_leach"] +
-               p[,"k_volat"] + p[,"k_plant"])
-  p <- cbind(p, "k2"=  p[,"k_bio"] + p[,"k_leach"] + p[,"k_volat"])
+  x <- kwb.utils::createAccessor(p)
 
+  k2 <- x("k_bio") + x("k_leach") + x("k_volat")
 
+  p <- cbind(p, k1 = k2 + x("k_plant"), k2 = k2)
 
-  if(!("PNEC_soil" %in% colnames(p))){
-    p <- add_PNEC_soil(p = p)
-  }
-  p
+  call_if_missing(p, "PNEC_soil", add_PNEC_soil)
 }
 
 #' Estimate Sorption Coefficient
@@ -104,42 +85,63 @@ add_Kd <- function(p, sub_info){
 
   Kd_regType <- sub_info$value[sub_info$info == "Kd_regType"]
 
+  x <- kwb.utils::createAccessor(p)
+
   if(Kd_regType != "no"){
+
     # negative concentrations are increased for K_d regression to the concentration
     # that would result after one day of deposition
     # this is possible if fertilizer concentration is negative as a result of
     # high uncertainty
-    too_low <- which(p[,"c_0"] <= 0)
+    too_low <- which(x("c_0") <= 0)
+
     if(length(too_low) > 0){
-      p[too_low,"c_0"] <- p[too_low,"D_air"]
+      p[["c_0"]][too_low] <- x("D_air")[too_low]
     }
 
+    # update the accessor function
+    x <- kwb.utils::createAccessor(p)
 
     p <- cbind(p, "K_d" = Kd_regression(
-      constant = p[,"const_K_d"],
-      beta_ph = p[,"beta_pH"],
-      beta_org = p[,"beta_oc"],
-      beta_conc = p[,"beta_c"],
+      constant = x("const_K_d"),
+      beta_ph = x("beta_pH"),
+      beta_org = x("beta_oc"),
+      beta_conc = x("beta_c"),
       regType = Kd_regType,
-      pH = p[,"pH"],
-      org_c = p[,"f_oc"] * 100,
-      conc = p[,"c_0"]))
+      pH = x("pH"),
+      org_c = x("f_oc") * 100,
+      conc = x("c_0"))
+    )
+
   } else {
+
     if(!("K_oc" %in% colnames(p))){
+
       if("K_ow" %in% colnames(p)){
-        stop(paste("If no Sorption coefficient (K_d) and no organic carbon",
-                   "soprtion (K_oc) is available, at least octanol-water",
-                   "coefficient (K_ow) must be provided"))
+        stop(
+          "If no Sorption coefficient (K_d) and no organic carbon",
+          "soprtion (K_oc) is available, at least octanol-water",
+          "coefficient (K_ow) must be provided"
+        )
       }
-      if(p[,"K_ow"] >= 1 & p[,"K_ow"] < 7.5){
-        p <- cbind(p, "K_oc" = 10^(0.81 * p[,"K_ow"] + 0.1))
-      } else if(p[,"K_ow"] < 1) {
-        p <- cbind(p, "K_oc" = 10^(0.52 * p[,"K_ow"] + 1.02))
+
+      K_ow <- x("K_ow")
+
+      if(K_ow >= 1 && K_ow < 7.5){
+        p <- cbind(p, "K_oc" = 10^(0.81 * K_ow + 0.1))
+      } else if(K_ow < 1) {
+        p <- cbind(p, "K_oc" = 10^(0.52 * K_ow + 1.02))
       }
+
       print("Note: The estimation of K_oc based on K_ow is very uncertain for polar substances")
     }
-    p <- cbind(p, "K_d" = p[,"f_oc"] * p[,"K_oc"])
+
+    # update the accessor function
+    x <- kwb.utils::createAccessor(p)
+
+    p <- cbind(p, "K_d" = x("f_oc") * x("K_oc"))
   }
+
   p
 }
 
@@ -155,7 +157,8 @@ add_Kd <- function(p, sub_info){
 #' @export
 #'
 add_Henry <- function(p){
-  cbind(p, "K_H" = p[,"p"] * p[,"M"] / p[,"sol"])
+  x <- kwb.utils::createAccessor(p)
+  cbind(p, "K_H" = x("p") * x("M") / x("sol"))
 }
 
 #' Estimate Air-Water partition coefficient
@@ -170,7 +173,8 @@ add_Henry <- function(p){
 #' @export
 #'
 add_AirWater <- function(p){
-  cbind(p, "K_AirWater" = p[,"K_H"] / (p[,"R"] * p[,"temp"]))
+  x <- kwb.utils::createAccessor(p)
+  cbind(p, "K_AirWater" = x("K_H") / (x("R") * x("temp")))
 }
 
 
@@ -186,9 +190,12 @@ add_AirWater <- function(p){
 #' @export
 #'
 add_SoilWater <- function(p){
-  cbind(p, "K_SoilWater" = (p[,"f_air"] * p[,"K_AirWater"]) +
-          p[,"f_water"] +
-          p[,"f_solid"] * p[,"rho_solid"] * p[,"K_d"] / 1000)
+  x <- kwb.utils::createAccessor(p)
+  cbind(p, "K_SoilWater" =
+    x("f_air") * x("K_AirWater") +
+    x("f_water") +
+    x("f_solid") * x("rho_solid") * x("K_d") / 1000
+  )
 }
 
 #' Estimate Soil-Water partition coefficient starting from infiltration rate
@@ -203,8 +210,8 @@ add_SoilWater <- function(p){
 #' @export
 #'
 add_SoilWater_reverse <- function(p){
-  cbind(p, "K_SoilWater" = (p[,"f_inf"] * p[,"rain"]) /
-          (p[,"k_leach"] * p[,"d"]))
+  x <- kwb.utils::createAccessor(p)
+  cbind(p, "K_SoilWater" = (x("f_inf") * x("rain")) / (x("k_leach") * x("d")))
 }
 
 #' Estimate bio concentration factor
@@ -223,15 +230,17 @@ add_SoilWater_reverse <- function(p){
 add_bcf <- function(p, sub_info){
   BCF_regType <- sub_info$value[sub_info$info == "BCF_regType"]
 
+  x <- kwb.utils::createAccessor(p)
+
   cbind(p, "BCF" = BCF_regression(
-    constant = p[,"const_BCF"],
-    beta_ph = p[,"gamma_pH"],
-    beta_org = p[,"gamma_oc"],
-    beta_conc = p[,"gamma_c"],
+    constant = x("const_BCF"),
+    beta_ph = x("gamma_pH"),
+    beta_org = x("gamma_oc"),
+    beta_conc = x("gamma_c"),
     regType = BCF_regType,
-    pH = p[,"pH"],
-    org_c = p[,"f_oc"] * 100,
-    conc = p[,"c_0"]))
+    pH = x("pH"),
+    org_c = x("f_oc") * 100,
+    conc = x("c_0")))
 }
 
 #' Estimate biological half-life
@@ -258,13 +267,15 @@ add_bcf <- function(p, sub_info){
 add_DT50 <- function(p, sub_info){
   dt50 <- NA
 
-  if(median(p[,"K_d"]) <= 10000){
+  med <- median(kwb.utils::selectColumns(p, "K_d"))
+
+  if(med <= 10000){
     dt50 <- 30000
   }
-  if(median(p[,"K_d"])  <= 1000){
+  if(med <= 1000){
     dt50 <- 3000
   }
-  if(median(p[,"K_d"])  <= 100){
+  if(med <= 100){
     dt50 <- 300
   }
   cbind(p, "DT50" = dt50)
@@ -283,14 +294,15 @@ add_DT50 <- function(p, sub_info){
 #'
 add_kvolat <- function(p){
 
-    first_quo <- 1 / (p[,"k_aslAir"] * p[,"K_AirWater"])
+  x <- kwb.utils::createAccessor(p)
 
-    second_quo <-
-      1 / (p[,"k_aslSoilAir"] * p[,"K_AirWater"] + p[,"k_aslSoilWater"])
+  # quotients 1 and 2
+  q1 <- 1 / (x("k_aslAir") * x("K_AirWater"))
+  q2 <- 1 / (x("k_aslSoilAir") * x("K_AirWater") + x("k_aslSoilWater"))
 
-    overal_factor <- p[,"K_SoilWater"] * p[,"d"]
+  overal_factor <- x("K_SoilWater") * x("d")
 
-    cbind(p, "k_volat" = ((first_quo + second_quo) * overal_factor)^-1)
+  cbind(p, "k_volat" = 1 / ((q1 + q2) * overal_factor))
 }
 
 #' Calculate infiltration rate
@@ -305,8 +317,8 @@ add_kvolat <- function(p){
 #' @export
 #'
 add_kleach <- function(p){
-  cbind(p, "k_leach" = (p[,"f_inf"] * p[,"rain"]) /
-          (p[,"K_SoilWater"] * p[,"d"]))
+  x <- kwb.utils::createAccessor(p)
+  cbind(p, "k_leach" = (x("f_inf") * x("rain")) / (x("K_SoilWater") * x("d")))
 }
 
 #' Calculate plant uptake rate
@@ -321,8 +333,11 @@ add_kleach <- function(p){
 #' @export
 #'
 add_kplant <- function(p){
-  cbind(p, "k_plant" = (p[,"BCF"] * p[,"Y"] * p[,"DM_plant"] / 100) /
-          (p[,"t_g"] * p[,"d"] * p[,"rho_soil"]))
+  x <- kwb.utils::createAccessor(p)
+  cbind(p, "k_plant" =
+    (x("BCF") * x("Y") * x("DM_plant") / 100) /
+    (x("t_g") * x("d") * x("rho_soil"))
+  )
 }
 
 #' Calculate biodegredation rate
@@ -337,7 +352,8 @@ add_kplant <- function(p){
 #' @export
 #'
 add_kbio <- function(p){
-  cbind(p, "k_bio" = log(2) / p[,"DT50"])
+  x <- kwb.utils::createAccessor(p)
+  cbind(p, "k_bio" = log(2) / x("DT50"))
 }
 
 #' Calculate soil mass related daily atmospheric deposition
@@ -352,7 +368,8 @@ add_kbio <- function(p){
 #' @export
 #'
 add_deposition <- function(p){
-  cbind(p, "D_air" =  p[,"D_air_tot"] / (p[,"d"] * p[,"rho_soil"]))
+  x <- kwb.utils::createAccessor(p)
+  cbind(p, "D_air" =  x("D_air_tot") / (x("d") * x("rho_soil")))
 }
 
 
@@ -368,12 +385,6 @@ add_deposition <- function(p){
 #' @export
 #'
 add_PNEC_soil <- function(p){
-  cbind(p, "PNEC_soil" =
-          (p[,"PNEC_water"] / 1000) * (p[,"K_oc"] * 0.0104 + 0.174))
+  x <- kwb.utils::createAccessor(p)
+  cbind(p, "PNEC_soil" = x("PNEC_water") / 1000 * (x("K_oc") * 0.0104 + 0.174))
 }
-
-
-
-
-
-
