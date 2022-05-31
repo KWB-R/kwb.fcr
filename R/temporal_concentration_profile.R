@@ -1,9 +1,9 @@
-#' Calculation of the pollutant concentation in top soil
+#' Calculation of the pollutant concentration in top soil
 #'
 #'
 #' @param conti_input Numeric vector of atmospheric depositions in mg/kg topsoil
 #' @param output_rate Numeric vector of absolute pollutant decay rates.
-#' @param c_i Numeric vector of inital concentrations in top soil
+#' @param c_i Numeric vector of initial concentrations in top soil
 #' @param t_max Numeric value with the last considered timestep (unit
 #' depends on the unit of the decay rate)
 #' @param t_res Temporal resolution (numeric value) of the timesteps returned
@@ -46,15 +46,16 @@ temp_c_profile <- function(
 temp_c_profile_v1 <- function(conti_input, output_rate, c_i, t_max, t_res, t_beg = 0){
   mat_out <- mapply(
     function(IN, OUT, START)
-      IN / OUT - (IN / OUT - START) *
-      exp(-OUT * seq(from = 0, to = t_max, by = t_res)),
+      IN / OUT -
+      (IN / OUT - START) *
+      exp(- OUT * unique(c(seq(from = 0, to = t_max, by = t_res), t_max))),
     conti_input, output_rate, c_i)
 
   dimnames(mat_out) <-
-    list(paste0("t", seq(from = 0 + t_beg,
-                         to = t_max + t_beg,
-                         by = t_res)),
+    list(paste0("t",
+                unique(c(seq(from = 0, to = t_max,by = t_res), t_max) + t_beg)),
          paste0("n", 1:ncol(mat_out)))
+
   mat_out
 }
 

@@ -1,7 +1,7 @@
 #' Estimate the soil sorption coefficient in two different ways
 #'
 #' Estimation via direct or indirect logarithmic linear regression including
-#' pH, organic carbon and soil concentration
+#' pH, organic carbon and soil concentration. (log10 is used for all variables)
 #'
 #' The constant value, the regression parameter (beta) and the soil
 #' characteristics can be single numeric values or vectors of the same length.
@@ -25,12 +25,12 @@
 Kd_regression <- function(
   constant, beta_ph, beta_org, beta_conc, regType = "direct", pH, org_c, conc
 ){
-  reg_out <-
-    beta_ph * pH + beta_org * log10(org_c) + beta_conc * log10(conc) + constant
+  reg_out <- # either this is K_d (-> direct in L/kg) or this is the concentration in porewater (-> indirect in µg/L)
+    10^(beta_ph * pH + beta_org * log10(org_c) + beta_conc * log10(conc) + constant)
   if(regType == "direct"){
-    10^reg_out
+    reg_out
   } else if(regType == "indirect"){
-    10^reg_out / conc
+    conc * 1000 / reg_out
   }
 }
 
@@ -63,12 +63,12 @@ BCF_regression <- function(
   constant, beta_ph, beta_org, beta_conc, regType = "direct",
   pH, org_c, conc
 ){
-  reg_out <-
-    beta_ph * pH + beta_org * log10(org_c) + beta_conc * log10(conc) + constant
+  reg_out <- # either this is BCF (-> direct) or this is the concentration in plants (-> indirect in mg/kg DM)
+    10^(beta_ph * pH + beta_org * log10(org_c) + beta_conc * log10(conc) + constant)
 
   if(regType == "direct"){
-    10^reg_out
+    reg_out
   } else if(regType == "indirect"){
-    10^reg_out / conc
+    reg_out / conc
   }
 }

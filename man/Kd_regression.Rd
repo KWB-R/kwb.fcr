@@ -38,7 +38,7 @@ A vector of sorption coefficients in L/kg
 }
 \description{
 Estimation via direct or indirect logarithmic linear regression including
-pH, organic carbon and soil concentration
+pH, organic carbon and soil concentration. (log10 is used for all variables)
 }
 \details{
 The constant value, the regression parameter (beta) and the soil

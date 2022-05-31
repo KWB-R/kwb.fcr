@@ -3,12 +3,14 @@
 #' The information of the Excel input files are used to prepare a Monte Carlo
 #' based data input for the calculation of a yearly concentration dynamic.
 #'
+#' The pollutant concentration at t = 0 (c_0) already includes the fertilizer
+#' application
+#'
 #' @param dat List with all the input variables. This list is produced by
 #' function [read_fcr_input()] from the Excel sheets.
 #' @param c_i The initial concentration before fertilizer application
 #' @param nFields The number Monte Carlo Simulations. This can be seen as
 #' different agriculatural fields with different charactersitics.
-#' @param firstYear We will see
 #' @param use_mixing_factor If TRUE, a mixing factor for porewater dilution by
 #' unpolluted groundwater is used to get the Risk quotient for Groundwater. The
 #' defahutl is FALSE. In that case pore water concentration is identical with
@@ -23,20 +25,17 @@
 #' @export
 #'
 oneYear_matrix <- function(
-  dat, c_i, nFields, firstYear = FALSE, use_mixing_factor = FALSE
+  dat, c_i, nFields, use_mixing_factor = FALSE
 ){
 
   p <- create_mcs_input(data_list = dat, nFields = nFields)
 
-  if(firstYear){
-    c_0 <- c_i
-  } else {
-    c_add <- # in mg / (kg * a)
-      (p[,"c_fert"] * p[,"p_app"]) / # in mg / (ha * a)
-      (p[,"d"] * p[,"rho_soil"] * 10000)
-    # sum of concentration from previous year and added pollutant
-    c_0 <- c_add + c_i # c_end not defined yet
-  }
+  c_add <- # in mg / (kg * a)
+    (p[,"c_fert"] * p[,"fert_app"]) / # in mg / (ha * a)
+    (p[,"d"] * p[,"rho_soil"] * 10000)
+
+  # sum of concentration from previous year and added pollutant
+  c_0 <- c_add + c_i
   p <- cbind(p, c_0)
 
   if(use_mixing_factor){

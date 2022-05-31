@@ -30,9 +30,9 @@ Draw n samples from uniform, normal, truncated normal (-> positive only),
 lognormal or gamma distributions based on two input values
 }
 \details{
-The values spefecified in valua_1 and value_2 represent min and max for
+The values specified in value_1 and value_2 represent min and max for
 "uniform", mean and standard deviation for "normal" and "tnormal", log
 mean and log standard devation for "lognormal" and shape and rate for
-"gamma", respectively. The shift value is especially interisting for lognormal
+"gamma". The shift value is especially interesting for lognormal
 or gamma distributions.
 }

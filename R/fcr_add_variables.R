@@ -12,6 +12,11 @@
 add_variables <- function(
   p, info
 ){
+  # Deposition (must be first because eventually needed for K_d regression)
+  if(!("D_air" %in% colnames(p))){
+    p <- add_deposition(p = p)
+  }
+
   if(!("k_volat" %in% colnames(p) &
        "k_leach" %in% colnames(p))){
 
@@ -65,10 +70,7 @@ add_variables <- function(
                p[,"k_volat"] + p[,"k_plant"])
   p <- cbind(p, "k2"=  p[,"k_bio"] + p[,"k_leach"] + p[,"k_volat"])
 
-  # Deposition
-  if(!("D_air" %in% colnames(p))){
-    p <- add_deposition(p = p)
-  }
+
 
   if(!("PNEC_soil" %in% colnames(p))){
     p <- add_PNEC_soil(p = p)
@@ -80,7 +82,17 @@ add_variables <- function(
 #'
 #' Estimation is based on the FCR prepared Monte Carlo table
 #'
-#' @param p Parameter table created with [oneYear_matrix()]
+#' Theoretically the initial concentration in soil can become negative if the
+#' pollutant concentration in fertilizes is negative. A negative concentration
+#' makes obviously no sense in a real situation. However, long-term impact is
+#' assessed, a broad concentration range of the pollutant also leads to more
+#' uncertain results. Negative concentrations in one year are averaged out.
+#' For the regression of the sorption coefficient, the concentration must be
+#' positive. Thus, negative values are increased to the concentration in
+#' top soil that would appear after one day of deposition.
+#'
+#' @param p Parameter table created with [oneYear_matrix()]. Note: D_air variable
+#' must be available in p if K_d is estimated with linear regression.
 #' @param sub_info The table containing additional substance information loaded
 #' with [additional_substanc_info()]
 #'
@@ -93,7 +105,17 @@ add_Kd <- function(p, sub_info){
   Kd_regType <- sub_info$value[sub_info$info == "Kd_regType"]
 
   if(Kd_regType != "no"){
-    p <- cbind(p, "K_d" = kwb.fcr::Kd_regression(
+    # negative concentrations are increased for K_d regression to the concentration
+    # that would result after one day of deposition
+    # this is possible if fertilizer concentration is negative as a result of
+    # high uncertainty
+    too_low <- which(p[,"c_0"] <= 0)
+    if(length(too_low) > 0){
+      p[too_low,"c_0"] <- p[too_low,"D_air"]
+    }
+
+
+    p <- cbind(p, "K_d" = Kd_regression(
       constant = p[,"const_K_d"],
       beta_ph = p[,"beta_pH"],
       beta_org = p[,"beta_oc"],
@@ -201,7 +223,7 @@ add_SoilWater_reverse <- function(p){
 add_bcf <- function(p, sub_info){
   BCF_regType <- sub_info$value[sub_info$info == "BCF_regType"]
 
-  cbind(p, "BCF" = Kd_regression(
+  cbind(p, "BCF" = BCF_regression(
     constant = p[,"const_BCF"],
     beta_ph = p[,"gamma_pH"],
     beta_org = p[,"gamma_oc"],

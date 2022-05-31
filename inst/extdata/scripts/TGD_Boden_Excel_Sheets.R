@@ -27,10 +27,10 @@ if(FALSE){
   ##############################################################################
   ################################ Daten Laden #################################
   ##############################################################################
-  Sub <- read_excel(path = "Y:/AUFTRAEGE/UFO-Phorwärts/Data-Work packages/Risikomodell/R-Skript/Substance_Sheet.xlsx",
+  Sub <- read_excel(path = "Y:/AUFTRAEGE/UFO-Phorw?rts/Data-Work packages/Risikomodell/R-Skript/Substance_Sheet.xlsx",
                     sheet = "Input", col_names = TRUE, na = "NA")
 
-  Env <- read_excel(path = "Y:/AUFTRAEGE/UFO-Phorwärts/Data-Work packages/Risikomodell/R-Skript/Environment_Sheet.xlsx",
+  Env <- read_excel(path = "Y:/AUFTRAEGE/UFO-Phorw?rts/Data-Work packages/Risikomodell/R-Skript/Environment_Sheet.xlsx",
                     sheet = "Input", col_names = TRUE, na = "NA")
   ########################## Process Data ########################################
   Substance <- "Benzo"
@@ -71,7 +71,7 @@ if(FALSE){
 
 
   cor(x = c(a$year_1$Input$K_d[1], a$year_2$Input$K_d[1], a$year_3$Input$K_d[1],
-    a$year_4$Input$K_d[1], a$year_5$Input$K_d[1], a$year_6$Input$K_d[1]), y = a$c30_leach[1:6,1])
+            a$year_4$Input$K_d[1], a$year_5$Input$K_d[1], a$year_6$Input$K_d[1]), y = a$c30_leach[1:6,1])
 
   summary(unlist(a$c30_leach[1,]))
   summary(unlist(a$c30_leach[2,]))
@@ -130,7 +130,7 @@ TGD_model <- function(
   # select fertilizer
   all_fert <- which(grepl(pattern = "_fert_", x = Input$Parameter))
   fert_selected <- which(Input$Parameter == paste0("c_fert_", Fertilizer) |
-                         Input$Parameter == paste0("p_fert_", Fertilizer))
+                           Input$Parameter == paste0("p_fert_", Fertilizer))
   Input$Parameter[fert_selected] <-
     gsub(pattern = paste0("_", Fertilizer), x = Input$Parameter[fert_selected], replacement = "")
   remaining <- all_fert[!(all_fert %in% fert_selected)]
@@ -233,7 +233,7 @@ TGD_model <- function(
       Unif <- apply(InputList$unif[,c(2,3,5,6)], 1,
                     function(x){
                       if(x[[3]] == "constant"){
-                      set.seed(as.numeric(x[[4]]))
+                        set.seed(as.numeric(x[[4]]))
                       } else {
                         rm(.Random.seed, envir=globalenv())
                       }
@@ -476,10 +476,10 @@ TGD_model <- function(
 
   if(sensPEC){
     round(c("origin_leach" =
-                  median(p$PNEC_leachate) * median(p$K_SoilWater) / median(p$rho_soil),
-                "origin_human" = median(p$PNEC_human) / median(p$BCF) /
-                  median(p$f_resorbed) / median(p$m_wheat),
-                "origin_soilOrganisms" = median(p$PNEC_organisms)), 2)
+              median(p$PNEC_leachate) * median(p$K_SoilWater) / median(p$rho_soil),
+            "origin_human" = median(p$PNEC_human) / median(p$BCF) /
+              median(p$f_resorbed) / median(p$m_wheat),
+            "origin_soilOrganisms" = median(p$PNEC_organisms)), 2)
   } else {
     if(OutputLite){
       names(MCS)[5] <- paste0("year_", detailed_year)
@@ -613,7 +613,7 @@ CumSum100 <- function(
   ylab = "Anteil der ?berschreitung des Risikoquotienten [%]",
   german = TRUE,
   VerticalLines = TRUE)
-  {
+{
 
   FertCols <- c(1, which(colnames(df) %in% FertID$Eng[Fertilizer]))
   quants <- apply(df[,FertCols], 2, quantile,
@@ -918,7 +918,7 @@ SoilInputOutput <- function(
         1000}) #  /1000 --> mg in g/ha
 
   }
-colnames(sum_field) <- FertID$Eng[Fertilizer]
+  colnames(sum_field) <- FertID$Eng[Fertilizer]
   # Deposition
   if(Eintr[nrow(Eintr),5] == "lognormal"){
     sum_field$Dep <- rlnorm(n = 1000, meanlog = as.numeric(Eintr[nrow(Eintr),2]),
@@ -950,7 +950,7 @@ colnames(sum_field) <- FertID$Eng[Fertilizer]
     }
   } else {
     par(mar = c(4.1, 15.1, 1,1))
-    boxplot(sum_field, outline = FALSE, 
+    boxplot(sum_field, outline = FALSE,
             col = rgb(129,169,187, maxColorValue = 255),
             range = 1.5, horizontal = TRUE, las = 1,
             names = c(FertID$Eng[Fertilizer], "deposition"),
@@ -1075,11 +1075,11 @@ plotDegredation <- function(
   lines(x = TimeInYears, y = AllYears[3,], col = g1, lwd = 2)
   axis(1, at = 0:years, labels = 0:years)
   if(plotLegend){
-  legend(x = 0, y =  max(AllYears[5,]) + 0.2 * max(AllYears[5,]),
-         seg.len = 1, horiz = T, xpd = T,
-         legend = c("Median", "25 - 75 % Perzentil", "10 - 90 % Perzentil"),
-         lwd = c(2, NA, NA),
-         fill = c(NA, g2, g3), col = c(g1, NA, NA), border = FALSE, bty = "n")
+    legend(x = 0, y =  max(AllYears[5,]) + 0.2 * max(AllYears[5,]),
+           seg.len = 1, horiz = T, xpd = T,
+           legend = c("Median", "25 - 75 % Perzentil", "10 - 90 % Perzentil"),
+           lwd = c(2, NA, NA),
+           fill = c(NA, g2, g3), col = c(g1, NA, NA), border = FALSE, bty = "n")
   }
 }
 
@@ -1203,50 +1203,50 @@ IndVarAnalysis <- function(
   n.comp$quotient <- n.comp$cumSumHigh / (n.comp$cumSumLow + n.comp$cumSumHigh)
 
 
-    plot(x = 0, y = 0, type = "n", ylim = c(0,100),
-         xlim = xlim, frame.plot = F,
-         xlab = xlabel,
-         ylab = paste0("Probability of RQ >", RQ_threshold," [%]"), xaxs = "i", yaxs = "i")
-    rect(xleft = xlim[1], xright = xlim[2], ybottom = 0, ytop = 10, col = rgb(220,230,242, maxColorValue = 255), border = NA)
-    rect(xleft = xlim[1], xright = xlim[2], ybottom = 10, ytop = 33, col = rgb(185,205,229, maxColorValue = 255), border = NA)
-    rect(xleft = xlim[1], xright = xlim[2], ybottom = 33, ytop = 66, col = rgb(149,179,215, maxColorValue = 255), border = NA)
-    rect(xleft = xlim[1], xright = xlim[2], ybottom = 66, ytop = 90, col = rgb(55,96,146, maxColorValue = 255), border = NA)
-    rect(xleft = xlim[1], xright = xlim[2], ybottom = 90, ytop = 100, col = rgb(37,64,97, maxColorValue = 255), border = NA)
-    abline(v = 0)
-    Likelihood <- data.frame(
-      "Likelihood" = c("very unlikely", "unlikely", "about as likely as not", "likely"),
-      "Value" = NA)
+  plot(x = 0, y = 0, type = "n", ylim = c(0,100),
+       xlim = xlim, frame.plot = F,
+       xlab = xlabel,
+       ylab = paste0("Probability of RQ >", RQ_threshold," [%]"), xaxs = "i", yaxs = "i")
+  rect(xleft = xlim[1], xright = xlim[2], ybottom = 0, ytop = 10, col = rgb(220,230,242, maxColorValue = 255), border = NA)
+  rect(xleft = xlim[1], xright = xlim[2], ybottom = 10, ytop = 33, col = rgb(185,205,229, maxColorValue = 255), border = NA)
+  rect(xleft = xlim[1], xright = xlim[2], ybottom = 33, ytop = 66, col = rgb(149,179,215, maxColorValue = 255), border = NA)
+  rect(xleft = xlim[1], xright = xlim[2], ybottom = 66, ytop = 90, col = rgb(55,96,146, maxColorValue = 255), border = NA)
+  rect(xleft = xlim[1], xright = xlim[2], ybottom = 90, ytop = 100, col = rgb(37,64,97, maxColorValue = 255), border = NA)
+  abline(v = 0)
+  Likelihood <- data.frame(
+    "Likelihood" = c("very unlikely", "unlikely", "about as likely as not", "likely"),
+    "Value" = NA)
 
-    if(sum(n.comp$quotient<0.1) > 0){
-      if(sum(n.comp$quotient >= 0.1) > 0){
-        Likelihood[1,2] <- n.comp$mid[nrow(n.comp[n.comp$quotient<0.1,])]
+  if(sum(n.comp$quotient<0.1) > 0){
+    if(sum(n.comp$quotient >= 0.1) > 0){
+      Likelihood[1,2] <- n.comp$mid[nrow(n.comp[n.comp$quotient<0.1,])]
       lines(x = rep(Likelihood[1,2],2), y = c(0,10), col = "red", lwd = 2)
-      }
     }
-    if(sum(n.comp$quotient<0.33) > 0){
-      if(sum(n.comp$quotient >= 0.33) > 0){
-        Likelihood[2,2] <- n.comp$mid[nrow(n.comp[n.comp$quotient<0.33,])]
-        lines(x = rep(Likelihood[2,2],2),  y = c(0,33), col = "red", lwd = 2)
-      }
+  }
+  if(sum(n.comp$quotient<0.33) > 0){
+    if(sum(n.comp$quotient >= 0.33) > 0){
+      Likelihood[2,2] <- n.comp$mid[nrow(n.comp[n.comp$quotient<0.33,])]
+      lines(x = rep(Likelihood[2,2],2),  y = c(0,33), col = "red", lwd = 2)
     }
-    if(sum(n.comp$quotient<0.66) > 0){
-      if(sum(n.comp$quotient >= 0.66) > 0){
-        Likelihood[3,2] <- n.comp$mid[nrow(n.comp[n.comp$quotient<0.66,])]
+  }
+  if(sum(n.comp$quotient<0.66) > 0){
+    if(sum(n.comp$quotient >= 0.66) > 0){
+      Likelihood[3,2] <- n.comp$mid[nrow(n.comp[n.comp$quotient<0.66,])]
       lines(x = rep(Likelihood[3,2],2), y = c(0,66), col = "red", lwd = 2)
-      }
     }
-    if(sum(n.comp$quotient<0.9) > 0){
-      if(sum(n.comp$quotient >= 0.9) > 0){
-        Likelihood[4,2] <- n.comp$mid[nrow(n.comp[n.comp$quotient<0.9,])]
+  }
+  if(sum(n.comp$quotient<0.9) > 0){
+    if(sum(n.comp$quotient >= 0.9) > 0){
+      Likelihood[4,2] <- n.comp$mid[nrow(n.comp[n.comp$quotient<0.9,])]
       lines(x = rep(Likelihood[4,2],2),  y = c(0,90), col = "red", lwd = 2)
-      }
     }
-    lines(x = n.comp$mid, y = n.comp$quotient*100, lwd = 3)
+  }
+  lines(x = n.comp$mid, y = n.comp$quotient*100, lwd = 3)
 
   list("Spearman Correlation" = corSpear,
        "Likelihood" = Likelihood,
        "RQ threshold table" = n.comp
-       )
+  )
 }
 
 HighestFert <- function(Sub = Sub, Env = Env, Substance){
