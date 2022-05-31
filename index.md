@@ -5,25 +5,30 @@
 [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/kwb.fcr)]()
 [![R-Universe_Status_Badge](https://kwb-r.r-universe.dev/badges/kwb.fcr)](https://kwb-r.r-universe.dev/)
 
-Assessment of oxygen course in rivers. Assessment is aimed at
-reducing critical situations
+This risk assessment is based on the TGD on risk assessment by the 
+European Commission. Possible Endpoints are soil organisms, groundwater
+organisms and human health via food consumption.Every variable can be entered 
+as probability distribution to include uncertainties or site specific
+variations.
 
 ## Installation
 
-For details on how to install KWB-R packages checkout our [installation tutorial](https://kwb-r.github.io/kwb.pkgbuild/articles/install.html).
+For installing the latest release of this R package run the following code below:
 
 ```r
-### Optionally: specify GitHub Personal Access Token (GITHUB_PAT)
-### See here why this might be important for you:
-### https://kwb-r.github.io/kwb.pkgbuild/articles/install.html#set-your-github_pat
+# Enable repository from kwb-r
+options(repos = c(
+  kwbr = 'https://kwb-r.r-universe.dev',
+  CRAN = 'https://cloud.r-project.org'))
 
-# Sys.setenv(GITHUB_PAT = "mysecret_access_token")
+# Download and install kwb.fcr in R
+install.packages('kwb.fcr')
 
-# Install package "remotes" from CRAN
-if (! require("remotes")) {
-  install.packages("remotes", repos = "https://cloud.r-project.org")
-}
-
-# Install KWB package 'kwb.fcr' from GitHub
-remotes::install_github("KWB-R/kwb.fcr")
+# Browse the kwb.fcr manual pages
+help(package = 'kwb.fcr')
 ```
+
+## Usage 
+
+Checkout the [Documentation](articles/documentation.html) article on how to use 
+this R package.
