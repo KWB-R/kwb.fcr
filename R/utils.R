@@ -1,38 +1,8 @@
-#' Truncate normal distribution
-#'
-#' Truncate normal distribution at a minimum or maximum value
-#'
-#' @param n Number of samples to be drawn
-#' @param mean Mean value of normal distribution
-#' @param sd Standard deviation of Normal distribution
-#' @param a Minimum of distribution (Default is -Inf)
-#' @param b Maximum of distribution (Default is Inf)
-#'
-#' @return numeric vector of length n with randomly drawn numbers of the
-#' truncated normal distribution
-#'
-#' @export
-#' @importFrom stats pnorm qnorm
-#'
-rtnorm <- function(
-  n, mean, sd, a = -Inf, b = Inf
-){
-  qnorm(p = runif(n = n,
-                  min = pnorm(q = a, mean = mean, sd = sd),
-                  max = pnorm(q = b, mean = mean, sd = sd)),
-        mean = mean, sd = sd)
-}
-
 #' Random samples from specified distribution
 #'
 #' Draw n samples from uniform, normal, truncated normal (-> positive only),
 #' lognormal or gamma distributions based on two input values
 #'
-#' The values spefecified in valua_1 and value_2 represent min and max for
-#' "uniform", mean and standard deviation for "normal" and "tnormal", log
-#' mean and log standard devation for "lognormal" and shape and rate for
-#' "gamma", respectively. The shift value is especially interisting for lognormal
-#' or gamma distributions.
 #'
 #' @param value_1,value_2 Distribution parameters (see Details)
 #' @param n Number of samples to be drawn
@@ -46,6 +16,13 @@ rtnorm <- function(
 #'
 #' @return Numeric vector of length n with randomly drawn samples of the
 #' specified distribution
+#'
+#' @details
+#' The values specified in value_1 and value_2 represent min and max for
+#' "uniform", mean and standard deviation for "normal" and "tnormal", log
+#' mean and log standard deviation for "lognormal" and shape and rate for
+#' "gamma". The shift value is especially interesting for lognormal
+#' or gamma distributions.
 #'
 #' @export
 #' @importFrom stats runif rnorm rlnorm rgamma
@@ -66,10 +43,117 @@ rdist <- function(
     v_out <- rlnorm(n = n, meanlog = value_1, sdlog = value_2)
   } else if(dist_name == "gamma"){
     v_out <- rgamma(n = n, shape = value_1, rate = value_2)
+  } else if(dist_name == "derive"){
+    v_out <- rderived(n = n, min = value_1, max = value_2)
+  }  else if(dist_name == "tderive"){
+    v_out <- rderived(n = n, min = value_1, max = value_2, a = 0)
+  } else if(dist_name == "logderive"){
+    v_out <- rlderived(n = n, min = value_1, max = value_2)
   }
   # re-initialize seed -> no seed
   set.seed(NULL)
   v_out + shift
 }
 
+#' Distribution derived by comparable circumstances
+#'
+#' This function combines a uniform distribution from minimum to maximum with
+#' the upper and lower tail of a normal distribution.
+#'
+#' @param n Number of samples to be drawn
+#' @param min Minimum value of normal comparables
+#' @param max Maximum value of normal comparables
+#' @param a Minimum of distribution (Default is -Inf)
+#'
+#' @return numeric vector of length n with randomly drawn values according to
+#' the distribution
+#'
+#' @details
+#' 95%, 2.5% and 2.5% of all drawn values originate from the uniform
+#' distribution, the lower tail, and the upper tail of a normal distribution,
+#' respectively. The normal distribution is characterized by the mean of
+#' minimum and maximum. The standard deviation is derived from the 2.5% and
+#' 97.5% quantile definied by the minimum and maximum values.
+#' (sd = (max - mean) / 1.959963)
+#'
+#' @export
+#' @importFrom stats runif
+#'
+rderived <- function(
+  n, min, max, a = -Inf
+){
+
+  mean <- mean(c(min,max))
+  sd <- (max - mean) / 1.959963
+
+  c(sample(x = runif(min, max, n = n * 0.95)),
+    rtnorm(n = n * 0.025, mean = mean, sd = sd, b = mean - 1.959963 * sd, a = a),
+    rtnorm(n = n * 0.025, mean = mean, sd = sd, a = mean + 1.959963 * sd))
+
+}
+
+#' Log-Distribution derived by comparable circumstances
+#'
+#' This function draws random values from a uniform distribution (minimum to
+#' maximum) with combined with the upper and lower tail of a normal
+#' distribution. Minimum and maximum values are transformed to a log10 scale
+#' first.
+#'
+#' @param n Number of samples to be drawn
+#' @param min Minimum value of normal comparables
+#' @param max Maximum value of normal comparables
+#'
+#' @return numeric vector of length n with randomly drawn values according to
+#' the distribution
+#'
+#' @details
+#' 95%, 2.5% and 2.5% of all drawn values originate from the log-uniform
+#' distribution, the lower tail, and the upper tail of a log-normal distribution,
+#' respectively. The log-normal distribution is characterized by the mean of
+#' log-minimum and log-maximum. The standard deviation is derived from the 2.5% and
+#' 97.5% quantile defined by the minimum and maximum values.
+#' (sd = (log10(max) - log10(mean)) / 1.959963)
+#'
+#' @export
+#' @importFrom stats runif
+#'
+rlderived <- function(
+  n, min, max
+){
+  min <- log10(min)
+  max <- log10(max)
+
+  mean <- mean(c(min,max))
+  sd <- (max - mean) / 1.959963
+
+  10^c(sample(x = runif(min, max, n = n * 0.95)),
+       rtnorm(n = n * 0.025, mean = mean, sd = sd, b = mean - 1.959963 * sd),
+       rtnorm(n = n * 0.025, mean = mean, sd = sd, a = mean + 1.959963 * sd))
+
+}
+
+#' Truncate normal distribution
+#'
+#' Truncate normal distribution at a minimum or maximum value
+#'
+#' @param n Number of samples to be drawn
+#' @param mean Mean value of normal distribution
+#' @param sd Standard deviation of Normal distribution
+#' @param a Minimum of distribution (Default is -Inf)
+#' @param b Maximum of distribution (Default is Inf)
+#'
+#' @return numeric vector of length n with randomly drawn numbers of the
+#' truncated normal distribution
+#'
+#' @export
+#' @importFrom stats pnorm qnorm runif
+#'
+rtnorm <- function(
+  n, mean, sd, a = -Inf, b = Inf
+){
+  qnorm(p = runif(n = n,
+                  min = pnorm(q = a, mean = mean, sd = sd),
+                  max = pnorm(q = b, mean = mean, sd = sd)),
+        mean = mean, sd = sd)
+}
 
