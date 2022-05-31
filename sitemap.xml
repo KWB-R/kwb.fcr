@@ -106,10 +106,16 @@
     <loc>/reference/pipe.html</loc>
   </url>
   <url>
+    <loc>/reference/rderived.html</loc>
+  </url>
+  <url>
     <loc>/reference/rdist.html</loc>
   </url>
   <url>
     <loc>/reference/read_fcr_input.html</loc>
+  </url>
+  <url>
+    <loc>/reference/rlderived.html</loc>
   </url>
   <url>
     <loc>/reference/rtnorm.html</loc>
