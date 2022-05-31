@@ -23,5 +23,8 @@ Suggests:
     rmarkdown
 VignetteBuilder: knitr
 Imports: 
-    readxl,
-    magrittr
+    kwb.utils,
+    magrittr,
+    readxl
+Remotes: 
+    github::kwb-r/kwb.utils
