@@ -99,7 +99,7 @@ p <- "K_d"
 
 p_groups <- cut(df[,p], breaks = quantile(x = df[,p], probs = seq(0,1,0.01)))
 
-par_gl <- split(x = 1:length(p_groups), f = p_groups)
+par_gl <- split(x = seq_along(p_groups), f = p_groups)
 
 group_prop <- lapply(par_gl, function(x){
   sum(x %in% high) / length(x)
@@ -110,7 +110,7 @@ lines(density(df[,p], from = min(df[,p]), to = max(df[,p])))
 
 plot(x = 0, y = 0, xlim = c(0.5, length(group_prop) + 0.5),
      ylim = c(0,1), type = "n", xlab = "", ylab = "", las = 1, xaxt = "n", main = p)
-axis(side = 1, at = 1:length(group_prop), labels = names(group_prop),
+axis(side = 1, at = seq_along(group_prop), labels = names(group_prop),
      las = 2, cex.axis = 0.8)
 rect(xleft = seq(0.6, length(group_prop) - 0.4, 1),
      xright = seq(1.4, length(group_prop) + 0.4, 1),

@@ -61,7 +61,7 @@ longterm_PEC <- function(
     delta_t <- c()
   }
 
-  for(year in 1:years){
+  for(year in seq_len(years)){
 
       p <- oneYear_matrix(dat = dat, c_i = c_i, nFields = nFields,
                           use_mixing_factor = use_mixing_factor)
