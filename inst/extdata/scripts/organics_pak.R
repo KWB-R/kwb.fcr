@@ -1,13 +1,16 @@
 
 # read data
-dat <- kwb.fcr::read_fcr_input(path = "inst/extdata/input/general", pollutantName = "organics")
-info <- kwb.fcr::additional_substanc_info(path = "inst/extdata/input/general", pollutantName = "organics")
+input_path <- "Y:/WWT_Department/Projects/NextGen/Data-Work packages/WP2/QCRA/fcr/input"
+dat_in <- kwb.fcr::read_fcr_input(input_path = input_path, pollutantName = "organics",
+                                  siteName = "braun")
+dat <- dat_in$dat
+info <- dat_in$info
 
 # for longterm application -----------------------------------------------------
 fcr_out <- kwb.fcr::longterm_PEC(dat = dat,
                                  info = info,
                                  years = 100,
-                                 nFields = 100000,
+                                 nFields = 10000,
                                  use_mixing_factor = FALSE,
                                  food_only = TRUE,
                                  growing_period = 180,
@@ -48,6 +51,11 @@ summary(fcr_out$model_variables[,"k_volat"])
 summary(fcr_out$model_variables[,"k_bio"])
 summary(fcr_out$model_variables[,"k_leach"])
 summary(fcr_out$model_variables[,"k_plant"])
+
+#
+dat$K_oc$value_1
+dat$K_oc$value_2
+dat$K_oc$distribution <- "logderive"
 
 # 1.
 dat$PNEC_water$value_1 <- 0.05 # für PAK

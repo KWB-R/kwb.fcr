@@ -2,17 +2,16 @@
 
 # read data
 input_path <- "Y:/WWT_Department/Projects/NextGen/Data-Work packages/WP2/QCRA/fcr/input"
-substance_input <- file.path(input_path, "pollutants")
-site_input <- file.path(input_path, "braun")
+dat_in <- kwb.fcr::read_fcr_input(input_path = input_path, pollutantName = "cd",
+                                  siteName = "braun")
 
-dat_in <- kwb.fcr::read_fcr_input(input_path = input_path, pollutantName = "cd", siteName = "braun")
 # info <- kwb.fcr::additional_substanc_info(path = "inst/extdata/input", pollutantName = "cd")
 
 # for longterm application -----------------------------------------------------
 fcr_out <- kwb.fcr::longterm_PEC(dat = dat_in$dat,
                     info = dat_in$info,
                     years = 100,
-                    nFields = 1000,
+                    nFields = 10000,
                     use_mixing_factor = FALSE,
                     food_only = TRUE,
                     growing_period = 180,
@@ -22,7 +21,7 @@ fcr_out <- kwb.fcr::longterm_PEC(dat = dat_in$dat,
 dev.new()
 kwb.fcr::shadingPlot(
   mat_xRow = fcr_out$PEC[["soil"]] / fcr_out$model_variables[,"PNEC_soil"],
-  ymin = 0, ymax = 1,
+  ymin = 0, ymax = 10,
   resolution = 0.01)
 
 kwb.fcr::CumSumSoil(
