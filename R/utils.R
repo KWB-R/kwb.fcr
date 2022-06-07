@@ -7,8 +7,8 @@
 #' @param value_1,value_2 Distribution parameters (see Details)
 #' @param n Number of samples to be drawn
 #' @param dist_name Character vector specifying the Name of the distribution.
-#' Either "none", "uniform", "normal" "tnormal" (for truncated), "lognormal" or
-#' "gamma"
+#' Either "none", "uniform", "normal" "tnormal" (for truncated), "lognormal",
+#' "gamma", "derive", "tderive" or "logderive"
 #' @param shift An numeric value defining a subsequent shift of the distribution
 #' The default is 0 (-> no shift)
 #' @param seed A numeric value to set the seed for random selection. The default
@@ -90,7 +90,7 @@ rderived <- function(
 #' Log-Distribution derived by comparable circumstances
 #'
 #' This function draws random values from a uniform distribution (minimum to
-#' maximum) with combined with the upper and lower tail of a normal
+#' maximum) combined with the upper and lower tail of a normal
 #' distribution. Minimum and maximum values are transformed to a log10 scale
 #' first.
 #'
@@ -107,7 +107,7 @@ rderived <- function(
 #' respectively. The log-normal distribution is characterized by the mean of
 #' log-minimum and log-maximum. The standard deviation is derived from the 2.5% and
 #' 97.5% quantile defined by the minimum and maximum values.
-#' (sd = (log10(max) - log10(mean)) / 1.959963)
+#' sd = (log10(max) - log10(mean)) / 1.959963
 #'
 #' @export
 #' @importFrom stats runif
