@@ -6,8 +6,10 @@
 #' named "'pollutantName'_sheet.xlsx". Furthermore, both excel tables must have
 #' the same number of columns and column names.
 #'
-#' @param path Path of both Excel files
-#' @param pollutantName Name of Pollutant as in filename
+#' @param input_path Path of the folder "pollutants" and "sites" that contain
+#' the input data excel sheets
+#' @param pollutantName Name of Pollutant as in filename of the pollutant sheet
+#' @param siteName Name of the site as in filename of the environment sheet
 #'
 #' @return List of one row data frames.
 #' The length equals the number of non NA input variables. Data frames include
@@ -18,15 +20,21 @@
 #' @importFrom readxl read_excel
 #'
 read_fcr_input <- function(
-  path, pollutantName
+  input_path, pollutantName, siteName
 ){
+  substance_path <- file.path(input_path, "pollutants")
+  site_path <- file.path(input_path, "sites")
 
   substance <- readxl::read_excel(
-    path = file.path(path, paste0(pollutantName, "_sheet.xlsx")),
+    path = file.path(substance_path, paste0(pollutantName, "_sheet.xlsx")),
     sheet = "input", col_names = TRUE, na = "NA")
 
+  info <- readxl::read_excel(
+    path = file.path(substance_path, paste0(pollutantName, "_sheet.xlsx")),
+    sheet = "additional_infos", col_names = TRUE, na = "NA")
+
   envi <- readxl::read_excel(
-    path = file.path(path, "environment_sheet.xlsx"),
+    path = file.path(site_path, paste0(siteName, "_sheet.xlsx")),
     sheet = "input", col_names = TRUE, na = "NA")
 
   df_in <- rbind(substance, envi)[,c("parameter", "value_1", "value_2", "shift",
@@ -38,7 +46,8 @@ read_fcr_input <- function(
   if(length(del_rows) > 0){
     df_in <- df_in[-del_rows,]
   }
-  split(df_in, df_in$parameter)
+  list("dat" = split(df_in, df_in$parameter),
+       "info" = info)
 }
 
 #' Read Additional pollutant information
