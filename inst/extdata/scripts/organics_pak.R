@@ -103,7 +103,7 @@ high <- which(vb > 1)
 df <- fcr_out$model_variables
 colnames(df)
 
-p <- "K_d"
+p <- "c_fert"
 
 p_groups <- cut(df[,p], breaks = quantile(x = df[,p], probs = seq(0,1,0.01)))
 
@@ -113,7 +113,8 @@ group_prop <- lapply(par_gl, function(x){
   sum(x %in% high) / length(x)
 })
 
-plot(density(df[high,p], from = min(df[,p]), to = max(df[,p])))
+
+plot(density(df[high,p], from = min(df[,p]), to = max(df[,p])), col = "red")
 lines(density(df[,p], from = min(df[,p]), to = max(df[,p])))
 
 plot(x = 0, y = 0, xlim = c(0.5, length(group_prop) + 0.5),
@@ -126,6 +127,14 @@ rect(xleft = seq(0.6, length(group_prop) - 0.4, 1),
 rect(xleft = seq(0.6, length(group_prop) - 0.4, 1),
      xright = seq(1.4, length(group_prop) + 0.4, 1),
      ybottom = 1 - unlist(group_prop), ytop = 1, col = "red")
+
+# regression between concentration and critical exceedance probability
+x <- quantile(x = df[,p], probs = seq(0,1,0.01))[-1]
+y <- unlist(group_prop)
+
+cor(x = x, y = y, method = "spearman")
+cor(x = x, y = y, method = "pearson")
+summary(lm(y ~ x))
 
 # 2D Diagramm, mit x und y jeweils ein Parameter und Farbkodierung für das Risiko
 # 0 -> grün, < 0.005 -> gelb, < 0.01 -> orange, alles andere Rot

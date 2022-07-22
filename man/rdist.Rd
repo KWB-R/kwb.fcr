@@ -12,8 +12,8 @@ rdist(value_1, value_2, n, dist_name, shift = 0, seed = NULL)
 \item{n}{Number of samples to be drawn}
 
 \item{dist_name}{Character vector specifying the Name of the distribution.
-Either "none", "uniform", "normal" "tnormal" (for truncated), "lognormal" or
-"gamma"}
+Either "none", "uniform", "normal" "tnormal" (for truncated), "lognormal",
+"gamma", "derive", "tderive" or "logderive"}
 
 \item{shift}{An numeric value defining a subsequent shift of the distribution
 The default is 0 (-> no shift)}
@@ -32,7 +32,7 @@ lognormal or gamma distributions based on two input values
 \details{
 The values specified in value_1 and value_2 represent min and max for
 "uniform", mean and standard deviation for "normal" and "tnormal", log
-mean and log standard devation for "lognormal" and shape and rate for
+mean and log standard deviation for "lognormal" and shape and rate for
 "gamma". The shift value is especially interesting for lognormal
 or gamma distributions.
 }

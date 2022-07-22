@@ -20,7 +20,7 @@ add_variables <- function(
   if(!("k_volat" %in% colnames(p) &
        "k_leach" %in% colnames(p))){
 
-    if(!("K_H" %in% colnames(p))) {
+    if(!("K_H" %in% colnames(p))){
       p <- add_Henry(p = p)
     }
 

@@ -19,7 +19,7 @@ the distribution
 }
 \description{
 This function draws random values from a uniform distribution (minimum to
-maximum) with combined with the upper and lower tail of a normal
+maximum) combined with the upper and lower tail of a normal
 distribution. Minimum and maximum values are transformed to a log10 scale
 first.
 }
@@ -29,5 +29,5 @@ distribution, the lower tail, and the upper tail of a log-normal distribution,
 respectively. The log-normal distribution is characterized by the mean of
 log-minimum and log-maximum. The standard deviation is derived from the 2.5\% and
 97.5\% quantile defined by the minimum and maximum values.
-(sd = (log10(max) - log10(mean)) / 1.959963)
+sd = (log10(max) - log10(mean)) / 1.959963
 }

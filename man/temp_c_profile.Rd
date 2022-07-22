@@ -2,7 +2,7 @@
 % Please edit documentation in R/temporal_concentration_profile.R
 \name{temp_c_profile}
 \alias{temp_c_profile}
-\title{Calculation of the pollutant concentation in top soil}
+\title{Calculation of the pollutant concentration in top soil}
 \usage{
 temp_c_profile(conti_input, output_rate, c_i, t_max, t_res, t_beg = 0)
 }
@@ -11,7 +11,7 @@ temp_c_profile(conti_input, output_rate, c_i, t_max, t_res, t_beg = 0)
 
 \item{output_rate}{Numeric vector of absolute pollutant decay rates.}
 
-\item{c_i}{Numeric vector of inital concentrations in top soil}
+\item{c_i}{Numeric vector of initial concentrations in top soil}
 
 \item{t_max}{Numeric value with the last considered timestep (unit
 depends on the unit of the decay rate)}
@@ -28,5 +28,5 @@ numeric vectors and rows depending on the defined timesteps with
 t_max and t_res
 }
 \description{
-Calculation of the pollutant concentation in top soil
+Calculation of the pollutant concentration in top soil
 }

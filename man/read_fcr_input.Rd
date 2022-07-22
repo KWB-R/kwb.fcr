@@ -4,12 +4,21 @@
 \alias{read_fcr_input}
 \title{Read environmental and pollutant variables}
 \usage{
-read_fcr_input(path, pollutantName)
+read_fcr_input(input_path, pollutantName, siteName, fertilizerName = "none")
 }
 \arguments{
-\item{path}{Path of both Excel files}
+\item{input_path}{Path of the folder "pollutants" and "sites" that contain
+the input data excel sheets}
 
-\item{pollutantName}{Name of Pollutant as in filename}
+\item{pollutantName}{Name of Pollutant as in filename of the pollutant
+(prefix before "_sheet.xslx)}
+
+\item{siteName}{Name of the site as in filename of the environment sheet
+(prefix before "_sheet.xslx)}
+
+\item{fertilizerName}{Name of the fertilizer as in filename of the fertilizer
+sheet (prefix before "_sheet.xslx). If fertilizerName = "none", fertilizer
+application and pollutant concentration will be set to 0.}
 }
 \value{
 List of one row data frames.
