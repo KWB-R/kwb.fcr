@@ -68,6 +68,12 @@ create_mcs_input <- function(
     } else {
       s <- NULL
     }
+    if(is.na(x[["shift"]])){
+      x[["shift"]] <- 0
+      warning("Not for every used variable a shift was defined.",
+              "Shift was automatically set to 0. Please define shift in the ",
+              "Excel sheets")
+    }
     rdist(value_1 = x[["value_1"]],
           value_2 = x[["value_2"]],
           n = nFields,
