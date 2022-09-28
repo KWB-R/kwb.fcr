@@ -3,12 +3,26 @@
 #' Draw n samples from uniform, normal, truncated normal (-> positive only),
 #' lognormal or gamma distributions based on two input values
 #'
-#'
-#' @param value_1,value_2 Distribution parameters (see Details)
-#' @param n Number of samples to be drawn
 #' @param dist_name Character vector specifying the Name of the distribution.
 #' Either "none", "uniform", "normal" "tnormal" (for truncated), "lognormal",
-#' "gamma", "derive", "tderive" or "logderive"
+#' "gamma", "derived", "tderived" or "logderived"
+#' @param value_1,value_2 Distribution parameters based on dist_name: \cr
+#' "none": value_1 is used as constantvalue, value_2 not used \cr
+#' "normal": value_1 is mean, value_2 is standard deviation \cr
+#' "tnormal": value_1 is mean, value_2 is standard deviation \cr
+#' "lognormal": value_1 is log mean, value_2 is standard log deviation
+#' (both natural logarithms) \cr
+#' "gamma": value_1 is shape, value_2 is rate \cr
+#' "uniform": value_1 is minimum, value_2 is maximum \cr
+#' "derived": value_1 is minimum of uniform distribution, value_2 is maximum of
+#' uniform distribution. Uniform distribution accounts for 95% of all data \cr
+#' "tderived": value_1 is minimum of uniform distribution, value_2 is maximum of
+#' uniform distribution. Uniform distribution accounts for 95% of all data \cr
+#' "logderived": value_1 is log minimum of log-uniform distribution, value_2 is
+#' log maximum of log-uniform distribution (both log 10). Log-Uniform
+#' distribution accounts for 95% of all data \cr
+#'
+#' @param n Number of samples to be drawn
 #' @param shift An numeric value defining a subsequent shift of the distribution
 #' The default is 0 (-> no shift)
 #' @param seed A numeric value to set the seed for random selection. The default
@@ -18,17 +32,18 @@
 #' specified distribution
 #'
 #' @details
+#'
 #' The values specified in value_1 and value_2 represent min and max for
 #' "uniform", mean and standard deviation for "normal" and "tnormal", log
-#' mean and log standard deviation for "lognormal" and shape and rate for
-#' "gamma". The shift value is especially interesting for lognormal
+#' mean and log standard deviation (both natural logarithm) for "lognormal",
+#' shape and rate for"gamma". The shift value is especially interesting for lognormal
 #' or gamma distributions.
 #'
 #' @export
 #' @importFrom stats runif rnorm rlnorm rgamma
 #'
 rdist <- function(
-  value_1, value_2, n, dist_name, shift = 0, seed = NULL
+    dist_name, value_1, value_2, n, shift = 0, seed = NULL
 ){
   set.seed(seed)
 
@@ -40,9 +55,9 @@ rdist <- function(
     tnormal = rtnorm(n = n, mean = value_1, sd = value_2, a = 0),
     lognormal = rlnorm(n = n, meanlog = value_1, sdlog = value_2),
     gamma = rgamma(n = n, shape = value_1, rate = value_2),
-    derive = rderived(n = n, min = value_1, max = value_2),
-    tderive = rderived(n = n, min = value_1, max = value_2, a = 0),
-    logderive = rlderived(n = n, min = value_1, max = value_2)
+    derived = rderived(n = n, min = value_1, max = value_2),
+    tderived = rderived(n = n, min = value_1, max = value_2, a = 0),
+    logderived = rlderived(n = n, min = value_1, max = value_2)
   )
 
   # re-initialize seed -> no seed

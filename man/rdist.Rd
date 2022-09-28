@@ -4,16 +4,30 @@
 \alias{rdist}
 \title{Random samples from specified distribution}
 \usage{
-rdist(value_1, value_2, n, dist_name, shift = 0, seed = NULL)
+rdist(dist_name, value_1, value_2, n, shift = 0, seed = NULL)
 }
 \arguments{
-\item{value_1, value_2}{Distribution parameters (see Details)}
-
-\item{n}{Number of samples to be drawn}
-
 \item{dist_name}{Character vector specifying the Name of the distribution.
 Either "none", "uniform", "normal" "tnormal" (for truncated), "lognormal",
-"gamma", "derive", "tderive" or "logderive"}
+"gamma", "derived", "tderived" or "logderived"}
+
+\item{value_1, value_2}{Distribution parameters based on "dist_name": \cr
+"none": value_1 is used as constant, value_2 not used \cr
+"normal": value_1 is mean, value_2 is standard deviation \cr
+"tnormal": value_1 is mean, value_2 is standard deviation \cr
+"lognormal": value_1 is log mean, value_2 is standard log deviation
+(both natural logarithms) \cr
+"gamma": value_1 is shape, value_2 is rate \cr
+"uniform": value_1 is minimum, value_2 is maximum \cr
+"derived": value_1 is minimum of uniform distribution, value_2 is maximum of
+uniform distribution. Uniform distribution accounts for 95\% of all data \cr
+"tderived": value_1 is minimum of uniform distribution, value_2 is maximum of
+uniform distribution. Uniform distribution accounts for 95\% of all data \cr
+"logderived": value_1 is log minimum of log-uniform distribution, value_2 is
+log maximum of log-uniform distribution (both log 10). Log-Uniform
+distribution accounts for 95\% of all data \cr}
+
+\item{n}{Number of samples to be drawn}
 
 \item{shift}{An numeric value defining a subsequent shift of the distribution
 The default is 0 (-> no shift)}
@@ -32,7 +46,7 @@ lognormal or gamma distributions based on two input values
 \details{
 The values specified in value_1 and value_2 represent min and max for
 "uniform", mean and standard deviation for "normal" and "tnormal", log
-mean and log standard deviation for "lognormal" and shape and rate for
-"gamma". The shift value is especially interesting for lognormal
+mean and log standard deviation (both natural logarithm) for "lognormal",
+shape and rate for"gamma". The shift value is especially interesting for lognormal
 or gamma distributions.
 }
