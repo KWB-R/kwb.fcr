@@ -60,23 +60,37 @@ lognormal or gamma distributions based on two input values</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">rdist</span><span class="op">(</span><span class="va">value_1</span>, <span class="va">value_2</span>, <span class="va">n</span>, <span class="va">dist_name</span>, shift <span class="op">=</span> <span class="fl">0</span>, seed <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">rdist</span><span class="op">(</span><span class="va">dist_name</span>, <span class="va">value_1</span>, <span class="va">value_2</span>, <span class="va">n</span>, shift <span class="op">=</span> <span class="fl">0</span>, seed <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>value_1, value_2</dt>
-<dd><p>Distribution parameters (see Details)</p></dd>
+    <dl><dt>dist_name</dt>
+<dd><p>Character vector specifying the Name of the distribution.
+Either "none", "uniform", "normal" "tnormal" (for truncated), "lognormal",
+"gamma", "derived", "tderived" or "logderived"</p></dd>
+
+
+<dt>value_1, value_2</dt>
+<dd><p>Distribution parameters based on "dist_name": <br>
+"none": value_1 is used as constant, value_2 not used <br>
+"normal": value_1 is mean, value_2 is standard deviation <br>
+"tnormal": value_1 is mean, value_2 is standard deviation <br>
+"lognormal": value_1 is log mean, value_2 is standard log deviation
+(both natural logarithms) <br>
+"gamma": value_1 is shape, value_2 is rate <br>
+"uniform": value_1 is minimum, value_2 is maximum <br>
+"derived": value_1 is minimum of uniform distribution, value_2 is maximum of
+uniform distribution. Uniform distribution accounts for 95% of all data <br>
+"tderived": value_1 is minimum of uniform distribution, value_2 is maximum of
+uniform distribution. Uniform distribution accounts for 95% of all data <br>
+"logderived": value_1 is log minimum of log-uniform distribution, value_2 is
+log maximum of log-uniform distribution (both log 10). Log-Uniform
+distribution accounts for 95% of all data <br></p></dd>
 
 
 <dt>n</dt>
 <dd><p>Number of samples to be drawn</p></dd>
-
-
-<dt>dist_name</dt>
-<dd><p>Character vector specifying the Name of the distribution.
-Either "none", "uniform", "normal" "tnormal" (for truncated), "lognormal",
-"gamma", "derive", "tderive" or "logderive"</p></dd>
 
 
 <dt>shift</dt>
@@ -100,8 +114,8 @@ specified distribution</p>
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>The values specified in value_1 and value_2 represent min and max for
 "uniform", mean and standard deviation for "normal" and "tnormal", log
-mean and log standard deviation for "lognormal" and shape and rate for
-"gamma". The shift value is especially interesting for lognormal
+mean and log standard deviation (both natural logarithm) for "lognormal",
+shape and rate for"gamma". The shift value is especially interesting for lognormal
 or gamma distributions.</p>
     </div>
 

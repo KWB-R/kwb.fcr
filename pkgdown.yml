@@ -3,7 +3,7 @@ pkgdown: 2.0.6
 pkgdown_sha: ~
 articles:
   documention: documention.html
-last_built: 2022-07-22T13:35Z
+last_built: 2022-09-28T07:19Z
 urls:
   reference: https://kwb-r.github.io/kwb.fcr/reference
   article: https://kwb-r.github.io/kwb.fcr/articles
