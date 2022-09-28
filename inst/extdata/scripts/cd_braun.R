@@ -3,11 +3,11 @@
 # read data
 input_path <- "Y:/WWT_Department/Projects/NextGen/Data-Work packages/WP2/QCRA/fcr/input"
 dat_0 <- kwb.fcr::read_fcr_input(input_path = input_path,
-                                  pollutantName = "pfos",
+                                  pollutantName = "cd",
                                   siteName = "braun", fertilizerName = "none")
 dat_in <- kwb.fcr::read_fcr_input(input_path = input_path,
-                                  pollutantName = "pfos",
-                                  siteName = "braun", fertilizerName = "struviteBR")
+                                  pollutantName = "cd",
+                                  siteName = "braun", fertilizerName = "sampleFert")
 
 
 # for longterm application -----------------------------------------------------

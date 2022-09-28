@@ -27,40 +27,51 @@ fcr_parameters <- function(RQ, RQno, RQ0){
   } else {
     delta <- RQ[high_risk]  -  RQno[high_risk]
 
-    r95 <- signif(quantile(x = RQ[high_risk], probs = 0.95), 3)
+    r95 <- quantile(x = RQ[high_risk], probs = 0.95)
+    r95no <- quantile(x = RQno[high_risk], probs = 0.95)
     # Absolute increase of risk (95th Quantile of all high-risk scenarios)
-    inc_abs <- signif(quantile(x = delta, probs = 0.95), 3)
+    inc_abs <- quantile(x = delta, probs = 0.95)
     # Increase of risk in % (95th Quantile of all high-risk scenarios)
-    risk_inc <- inc_abs  / r95 * 100
+    risk_inc <- round(inc_abs  / r95no * 100, 2)
   }
   # Increase of high-risk situations in %
   situation_inc <- if(length(high_risk) > 0L){
-    signif(
-      (1 - sum(RQno > 1 & RQno > RQ0) / sum(RQ > 1 & RQ > RQ0)) * 100,
-      digits = 3)
+    round((1 - sum(RQno > 1 & RQno > RQ0) / sum(RQ > 1 & RQ > RQ0)) * 100, 2)
   } else {
     0
   }
 
-  round(c("q95" = unname(r95),
-          "RQ_delta_abs" = unname(inc_abs),
-          "RQ_delta_spec" = unname(risk_inc),
-          "high_risk" = unname(situation_inc)
+  round(c("tR" = signif(unname(r95),3),
+          "deltaR_abs" = signif(unname(inc_abs),3),
+          "deltaR_rel_percent" = unname(risk_inc),
+          "deltaRS_percent" = unname(situation_inc)
           ), 3)
 }
 
 interprate_parameters <- function(
-  high_risk_th = c(1, 10, 100),
-  severity_th = c(10, 100, 1000),
-  rq_increase_th = c(1, 10, 100),
-  df_in
+    deltaRS_th = c(1, 10, 50),
+    tR_th = c(10, 100, 1000),
+    deltaR_rel_th = c(1, 10, 100),
+    df_in
 ){
-  mat <- matrix(data = c(1,1,1,2,2,2,2,3,2,2,3,4,2,3,4,5), nrow = 4, ncol = 4, byrow = T)
+  mat <- matrix(data = c(1,1,1,2,2,2,2,3,2,2,3,4,2,3,4,5),
+                nrow = 4, ncol = 4, byrow = T)
 
   c_column <- as.numeric(
-    cut(x = df_out$soil.RQ_delta_spec, breaks = c(0, rq_increase_th, Inf), include.lowest = T))
+    cut(
+      x = df_in[,"soil.deltaR_rel_percent"],
+      breaks = c(0, deltaR_rel_th, Inf),
+      include.lowest = T
+    )
+  )
+
   c_row <- as.numeric(
-    cut(x = df_out$soil.high_risk, breaks = c(0, high_risk_th, Inf), include.lowest = T))
+    cut(
+      x = df_in[,"soil.deltaRS_percent"],
+      breaks = c(0, deltaRS_th, Inf),
+      include.lowest = T
+    )
+  )
 
   df_in$soil_class <- NA
   for(i in seq_along(c_row)){
@@ -68,10 +79,20 @@ interprate_parameters <- function(
   }
 
   c_column <- as.numeric(
-    cut(x = df_out$water.RQ_delta_spec, breaks = c(0, rq_increase_th, Inf), include.lowest = T))
-  c_row <- as.numeric(
-    cut(x = df_out$water.high_risk, breaks = c(0, high_risk_th, Inf), include.lowest = T))
+    cut(
+      x = df_in[,"water.deltaR_rel_percent"],
+      breaks = c(0, deltaR_rel_th, Inf),
+      include.lowest = T
+    )
+  )
 
+  c_row <- as.numeric(
+    cut(
+      x = df_in[,"water.deltaRS_percent"],
+      breaks = c(0, deltaRS_th, Inf),
+      include.lowest = T
+    )
+  )
 
   df_in$water_class <- NA
   for(i in seq_along(c_row)){
@@ -79,7 +100,7 @@ interprate_parameters <- function(
   }
 
   df_in$soil_class <- sapply(seq_along(df_in$soil_class), function(i){
-    add <- max(which(c(-Inf, severity_th) < df_in$soil.q95[i])) - 1
+    add <- max(which(c(-Inf, tR_th) < df_in[i,"soil.tR"])) - 1
     if(df_in$dep_impact[i] > 0.7){
       add <- 0
     }
@@ -87,7 +108,7 @@ interprate_parameters <- function(
   })
 
   df_in$water_class <- sapply(seq_along(df_in$water_class), function(i){
-    add <- max(which(c(-Inf, severity_th) < df_in$water.q95[i])) - 1
+    add <- max(which(c(-Inf, tR_th) < df_in[i,"water.tR"])) - 1
     if(df_in$dep_impact[i] > 0.7){
       add <- 0
     }
@@ -100,12 +121,15 @@ interprate_parameters <- function(
 }
 
 input_path <- "Y:/WWT_Department/Projects/NextGen/Data-Work packages/WP2/QCRA/fcr/input"
+dir(file.path(input_path, "fertilizers"))
 
-siteName <- "braun"
-fertilizerName <- "sludgePhorw"
+siteName <- "germanMix"
+fertilizerName <- "GerThresh"
 pollutantNames <- c("as", "cd", "cr", "cu", "hg", "ni", "pb", "zn", "benzo", "pcdd")
 pollutantNames <- c("as","cd", "cr", "cu", "hg", "ni", "pb", "zn")
-pollutantNames <- c("cr")
+pollutantNames <- c("hg")
+ciFactor <- 1
+cfFactor <- 1
 
 output <- list()
 for(pollutantName in pollutantNames){
@@ -120,6 +144,8 @@ for(pollutantName in pollutantNames){
                                     siteName = siteName,
                                     fertilizerName = fertilizerName)
 
+  dat_in$dat$c_i$value_1 <- dat_in$dat$c_i$value_1 * ciFactor
+  dat_in$dat$c_fert$value_1 <- dat_in$dat$c_fert$value_1 * cfFactor
   # for longterm application -----------------------------------------------------
   fcr_out0 <- kwb.fcr::longterm_PEC(dat = dat_0$dat,
                                     info = dat_0$info,
@@ -144,9 +170,9 @@ for(pollutantName in pollutantNames){
 
 df_out <- data.frame(do.call(rbind, output))
 interprate_parameters(df_in = df_out,
-                      high_risk_th = c(1, 10, 100),
-                      rq_increase_th = c(1,10,100),
-                      severity_th = c(10, 100, 1000))
+                      deltaRS_th = c(1, 10, 50),
+                      deltaR_rel_th =  c(10,50,100),
+                      tR_th = c(10, 100, 1000))
 
 
 
