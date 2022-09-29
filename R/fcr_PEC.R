@@ -13,6 +13,9 @@
 #' @param use_mixing_factor Not working yet! If TRUE, porewater is diluted by pollutant free
 #' groundwater for a more realistic estimation of risks in groundwater.
 #' However the TGD approach assumes porewater = groundwater for the assessment.
+#' @param PNECwater_c_i If TRUE, the initial concentration in soil is derived
+#' by a RQ = 1 for groundwater risk assessment (PEC_porewater = PNEC_porewater).
+#' Thus, the inital concentration is defined by the applied PNEC for groundwater.
 #' @param food_only If TRUE, the predicted human consumption via food is
 #' multiplied by 2 to compensate the disregard of water consumption
 #' @param growing_period Numeric value specifiyng the number of days with plant
@@ -38,13 +41,18 @@
 #' @importFrom graphics par text rect
 #'
 longterm_PEC <- function(
-  dat, info, years, nFields, use_mixing_factor = FALSE, food_only = TRUE,
-  growing_period = 180, t_res = 1, traceBackVariables = FALSE
+  dat, info, years, nFields, use_mixing_factor = FALSE, PNECwater_c_i = FALSE,
+  food_only = TRUE, growing_period = 180, t_res = 1, traceBackVariables = FALSE
 ){
 
-  c_i <- rdist(value_1 = dat$c_i$value_1, value_2 = dat$c_i$value_2,
-               n = nFields, dist_name = dat$c_i$distribution,
-               shift = dat$c_i$shift, seed = 0)
+  c_i <- if(PNECwater_c_i){
+    get_c_i_from_PNEC_porewater(dat = dat, info = infor, nFields = nFields)
+  } else {
+    rdist(value_1 = dat$c_i$value_1, value_2 = dat$c_i$value_2,
+          n = nFields, dist_name = dat$c_i$distribution,
+          shift = dat$c_i$shift, seed = 0)
+  }
+
 
   PEC <- list("soil" = list(), "porewater" = list(), "human" = list())
   c_course <- list(c_i)
@@ -237,9 +245,47 @@ get_PEC_human <- function(p, d, food_only){
 #' @export
 #'
 get_PEC_porewater <- function(p, d){
-  PEC_soil <- get_PEC_soil(p = p, d = d) * p[,"rho_soil"] / p[,"K_SoilWater"]
+  get_PEC_soil(p = p, d = d) * p[,"rho_soil"] / p[,"K_SoilWater"]
 }
 
+#' Calculate the initial concentration in soil for RQ porewater = 1
+#'
+#' The initial soil concentration is calculated so that the average concetrantion
+#' of the first 30 days leads to a PEC_water that equals the PNEC water
+#'
+#' @param dat List with all the input variables. This list is produced by
+#' function [read_fcr_input()] from the Excel sheets.
+#' @param info he table containing additional substance information loaded
+#' with [additional_substanc_info()]
+#' @param nFields Number of Monte Carlo cycles
+#'
+#' @details
+#' The equation is a combination of the definition for PEC soil and
+#' PEC porewater the from TGD, back-calculating to c0.
+#'
+#' @return Numeric vector of lenght nFields, containig the initial
+#' concentrations in µg/L
+#'
+#' @export
+#'
+get_c_i_from_PNEC_porewater <- function(dat, info, nFields){
+  all_vars <- kwb.fcr::longterm_PEC(
+    dat = dat,
+    info = info,
+    years = 1,
+    nFields = nFields
+  )
+
+  k <- all_vars$model_variables[,"k1"]
+  d_air <- all_vars$model_variables[,"D_air"]
+  pec1_water <- all_vars$model_variables[,"PNEC_water"]
+  K_SoilWater <- all_vars$model_variables[,"K_SoilWater"]
+  rho_soil <- all_vars$model_variables[,"rho_soil"]
+
+  c_30 <- pec1_water * K_SoilWater / rho_soil
+
+  (c_30 * 30 * k  - d_air * 30) / (1 - exp(-30 * k)) + d_air / k
+}
 
 
 

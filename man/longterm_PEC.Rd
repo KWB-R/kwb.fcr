@@ -10,6 +10,7 @@ longterm_PEC(
   years,
   nFields,
   use_mixing_factor = FALSE,
+  PNECwater_c_i = FALSE,
   food_only = TRUE,
   growing_period = 180,
   t_res = 1,
@@ -30,6 +31,10 @@ with \code{\link[=additional_substanc_info]{additional_substanc_info()}}}
 \item{use_mixing_factor}{Not working yet! If TRUE, porewater is diluted by pollutant free
 groundwater for a more realistic estimation of risks in groundwater.
 However the TGD approach assumes porewater = groundwater for the assessment.}
+
+\item{PNECwater_c_i}{If TRUE, the initial concentration in soil is derived
+by a RQ = 1 for groundwater risk assessment (PEC_porewater = PNEC_porewater).
+Thus, the inital concentration is defined by the applied PNEC for groundwater.}
 
 \item{food_only}{If TRUE, the predicted human consumption via food is
 multiplied by 2 to compensate the disregard of water consumption}
