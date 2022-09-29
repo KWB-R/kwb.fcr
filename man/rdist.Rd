@@ -11,8 +11,8 @@ rdist(dist_name, value_1, value_2, n, shift = 0, seed = NULL)
 Either "none", "uniform", "normal" "tnormal" (for truncated), "lognormal",
 "gamma", "derived", "tderived" or "logderived"}
 
-\item{value_1, value_2}{Distribution parameters based on "dist_name": \cr
-"none": value_1 is used as constant, value_2 not used \cr
+\item{value_1, value_2}{Distribution parameters based on dist_name: \cr
+"none": value_1 is used as constantvalue, value_2 not used \cr
 "normal": value_1 is mean, value_2 is standard deviation \cr
 "tnormal": value_1 is mean, value_2 is standard deviation \cr
 "lognormal": value_1 is log mean, value_2 is standard log deviation
@@ -23,8 +23,8 @@ Either "none", "uniform", "normal" "tnormal" (for truncated), "lognormal",
 uniform distribution. Uniform distribution accounts for 95\% of all data \cr
 "tderived": value_1 is minimum of uniform distribution, value_2 is maximum of
 uniform distribution. Uniform distribution accounts for 95\% of all data \cr
-"logderived": value_1 is log minimum of log-uniform distribution, value_2 is
-log maximum of log-uniform distribution (both log 10). Log-Uniform
+"logderived": value_1 is minimum of log-uniform distribution, value_2 is
+maximum of log-uniform distribution (values not log-scaled). Log-Uniform
 distribution accounts for 95\% of all data \cr}
 
 \item{n}{Number of samples to be drawn}

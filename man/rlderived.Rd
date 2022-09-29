@@ -19,7 +19,7 @@ the distribution
 }
 \description{
 This function draws random values from a uniform distribution (minimum to
-maximum) combined with the upper and lower tail of a normal
+maximum) combined with the upper and lower tail of a log normal
 distribution. Minimum and maximum values are transformed to a log10 scale
 first.
 }
@@ -30,4 +30,9 @@ respectively. The log-normal distribution is characterized by the mean of
 log-minimum and log-maximum. The standard deviation is derived from the 2.5\% and
 97.5\% quantile defined by the minimum and maximum values.
 sd = (log10(max) - log10(mean)) / 1.959963
+
+The number of Fields is multiplied by 38 for the uniform distribution, while
+it is multiplied by 1 for the tails of the log-normal distribution
+(38 / 40 = 95\%)
+Finally, the defined number of fields is randomly drawn from the vector.
 }

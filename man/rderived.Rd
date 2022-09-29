@@ -30,4 +30,8 @@ respectively. The normal distribution is characterized by the mean of
 minimum and maximum. The standard deviation is derived from the 2.5\% and
 97.5\% quantile definied by the minimum and maximum values.
 (sd = (max - mean) / 1.959963)
+
+The number of Fields is multiplied by 38 for the uniform distribution, while
+it is multiplied by 1 for the tails of the normal distribution (38/40 = 95\%).
+Finally, the defined number of fields is randomly drawn from the vector.
 }

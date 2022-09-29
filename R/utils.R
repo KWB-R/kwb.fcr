@@ -18,8 +18,8 @@
 #' uniform distribution. Uniform distribution accounts for 95% of all data \cr
 #' "tderived": value_1 is minimum of uniform distribution, value_2 is maximum of
 #' uniform distribution. Uniform distribution accounts for 95% of all data \cr
-#' "logderived": value_1 is log minimum of log-uniform distribution, value_2 is
-#' log maximum of log-uniform distribution (both log 10). Log-Uniform
+#' "logderived": value_1 is minimum of log-uniform distribution, value_2 is
+#' maximum of log-uniform distribution (values not log-scaled). Log-Uniform
 #' distribution accounts for 95% of all data \cr
 #'
 #' @param n Number of samples to be drawn
@@ -60,6 +60,10 @@ rdist <- function(
     logderived = rlderived(n = n, min = value_1, max = value_2)
   )
 
+  if(is.null(v_out)){
+    stop(paste0(dist_name, " is not one of the defined distributions."))
+  }
+
   # re-initialize seed -> no seed
   set.seed(NULL)
   v_out + shift
@@ -86,6 +90,10 @@ rdist <- function(
 #' 97.5% quantile definied by the minimum and maximum values.
 #' (sd = (max - mean) / 1.959963)
 #'
+#' The number of Fields is multiplied by 38 for the uniform distribution, while
+#' it is multiplied by 1 for the tails of the normal distribution (38/40 = 95%).
+#' Finally, the defined number of fields is randomly drawn from the vector.
+#'
 #' @export
 #' @importFrom stats runif
 #'
@@ -95,17 +103,18 @@ rderived <- function(
 
   mean <- mean(c(min,max))
   sd <- (max - mean) / 1.959963
-
-  c(sample(x = runif(min, max, n = n * 0.95)),
-    rtnorm(n = n * 0.025, mean = mean, sd = sd, b = mean - 1.959963 * sd, a = a),
-    rtnorm(n = n * 0.025, mean = mean, sd = sd, a = mean + 1.959963 * sd))
+  sample(
+    x = c(sample(x = runif(min, max, n = n * 38)),
+          rtnorm(n = n, mean = mean, sd = sd, b = mean - 1.959963 * sd, a = a),
+          rtnorm(n = n, mean = mean, sd = sd, a = mean + 1.959963 * sd))[1:n],
+    size = n)
 
 }
 
 #' Log-Distribution derived by comparable circumstances
 #'
 #' This function draws random values from a uniform distribution (minimum to
-#' maximum) combined with the upper and lower tail of a normal
+#' maximum) combined with the upper and lower tail of a log normal
 #' distribution. Minimum and maximum values are transformed to a log10 scale
 #' first.
 #'
@@ -124,6 +133,11 @@ rderived <- function(
 #' 97.5% quantile defined by the minimum and maximum values.
 #' sd = (log10(max) - log10(mean)) / 1.959963
 #'
+#' The number of Fields is multiplied by 38 for the uniform distribution, while
+#' it is multiplied by 1 for the tails of the log-normal distribution
+#' (38 / 40 = 95%)
+#' Finally, the defined number of fields is randomly drawn from the vector.
+#'
 #' @export
 #' @importFrom stats runif
 #'
@@ -136,9 +150,11 @@ rlderived <- function(
   mean <- mean(c(min,max))
   sd <- (max - mean) / 1.959963
 
-  10^c(sample(x = runif(min, max, n = n * 0.95)),
-       rtnorm(n = n * 0.025, mean = mean, sd = sd, b = mean - 1.959963 * sd),
-       rtnorm(n = n * 0.025, mean = mean, sd = sd, a = mean + 1.959963 * sd))
+  sample(
+    x = 10^c(sample(x = runif(min, max, n = n * 38)),
+       rtnorm(n = n , mean = mean, sd = sd, b = mean - 1.959963 * sd),
+       rtnorm(n = n, mean = mean, sd = sd, a = mean + 1.959963 * sd)),
+    size = n)
 
 }
 
