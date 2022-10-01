@@ -30,23 +30,23 @@ read_fcr_input <- function(
 
   # Load substance and site information
   substance_path <- file.path(input_path, "pollutants")
-  if(!any(dir(substance_path) == paste0(pollutantName, "_sheet.xlsx"))){
+  if(!any(dir(substance_path) == paste0(pollutantName, ".xlsx"))){
     stop(paste0("No pollutant called '", pollutantName, "'"))
   }
   site_path <- file.path(input_path, "sites")
-  if(!any(dir(site_path) == paste0(siteName, "_sheet.xlsx"))){
+  if(!any(dir(site_path) == paste0(siteName, ".xlsx"))){
     stop(paste0("No site called '", siteName, "'"))
   }
 
   substance <- readxl::read_excel(
-    path = file.path(substance_path, paste0(pollutantName, "_sheet.xlsx")),
+    path = file.path(substance_path, paste0(pollutantName, ".xlsx")),
     sheet = "input", col_names = TRUE, na = "NA")
   info <- readxl::read_excel(
-    path = file.path(substance_path, paste0(pollutantName, "_sheet.xlsx")),
+    path = file.path(substance_path, paste0(pollutantName, ".xlsx")),
     sheet = "additional_infos", col_names = TRUE, na = "NA")
 
   envi <- readxl::read_excel(
-    path = file.path(site_path, paste0(siteName, "_sheet.xlsx")),
+    path = file.path(site_path, paste0(siteName, ".xlsx")),
     sheet = "input", col_names = TRUE, na = "NA")
 
   # load fertilizer information
@@ -61,11 +61,11 @@ read_fcr_input <- function(
       "references" = rep("", 2), comments = rep("", 2))
   } else {
     fertilizer_path <- file.path(input_path, "fertilizers")
-    if(!any(dir(fertilizer_path) == paste0(fertilizerName, "_sheet.xlsx"))){
+    if(!any(dir(fertilizer_path) == paste0(fertilizerName, ".xlsx"))){
       stop(paste0("No fertilizer called '", fertilizerName, "'"))
     }
     fert <- readxl::read_excel(
-      path = file.path(fertilizer_path, paste0(fertilizerName, "_sheet.xlsx")),
+      path = file.path(fertilizer_path, paste0(fertilizerName, ".xlsx")),
       sheet = "input", col_names = TRUE, na = "NA")
 
     polRow <- grep(fert$parameter, pattern = paste0(pollutantName, "_"))
