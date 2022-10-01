@@ -37,6 +37,7 @@ oneYear_matrix <- function(
   # sum of concentration from previous year and added pollutant
   c_0 <- c_add + c_i
   p <- cbind(p, c_0)
+  p[,"c_i"] <- c_i
 
   if(use_mixing_factor){
     MF <- 1 + (p[,"v_G"] * p[,"m_d"] /
