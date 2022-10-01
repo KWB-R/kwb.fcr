@@ -69,6 +69,7 @@ properties (Number of Monte Carlo cycles) can be chosen.</p>
 <span>  <span class="va">years</span>,</span>
 <span>  <span class="va">nFields</span>,</span>
 <span>  use_mixing_factor <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  PNECwater_c_i <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  food_only <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  growing_period <span class="op">=</span> <span class="fl">180</span>,</span>
 <span>  t_res <span class="op">=</span> <span class="fl">1</span>,</span>
@@ -100,6 +101,12 @@ with <code><a href="additional_substanc_info.html">additional_substanc_info()</a
 <dd><p>Not working yet! If TRUE, porewater is diluted by pollutant free
 groundwater for a more realistic estimation of risks in groundwater.
 However the TGD approach assumes porewater = groundwater for the assessment.</p></dd>
+
+
+<dt>PNECwater_c_i</dt>
+<dd><p>If TRUE, the initial concentration in soil is derived
+by a RQ = 1 for groundwater risk assessment (PEC_porewater = PNEC_porewater).
+Thus, the inital concentration is defined by the applied PNEC for groundwater.</p></dd>
 
 
 <dt>food_only</dt>
