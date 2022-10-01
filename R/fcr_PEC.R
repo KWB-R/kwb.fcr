@@ -46,7 +46,7 @@ longterm_PEC <- function(
 ){
 
   c_i <- if(PNECwater_c_i){
-    get_c_i_from_PNEC_porewater(dat = dat, info = infor, nFields = nFields)
+    get_c_i_from_PNEC_porewater(dat = dat, info = info, nFields = nFields)
   } else {
     rdist(value_1 = dat$c_i$value_1, value_2 = dat$c_i$value_2,
           n = nFields, dist_name = dat$c_i$distribution,
@@ -278,7 +278,7 @@ get_c_i_from_PNEC_porewater <- function(dat, info, nFields){
 
   k <- all_vars$model_variables[,"k1"]
   d_air <- all_vars$model_variables[,"D_air"]
-  pec1_water <- all_vars$model_variables[,"PNEC_water"]
+  pec1_water <- dat$PNEC_water$value_1
   K_SoilWater <- all_vars$model_variables[,"K_SoilWater"]
   rho_soil <- all_vars$model_variables[,"rho_soil"]
 
