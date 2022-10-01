@@ -106,7 +106,7 @@ rderived <- function(
   sample(
     x = c(sample(x = runif(min, max, n = n * 38)),
           rtnorm(n = n, mean = mean, sd = sd, b = mean - 1.959963 * sd, a = a),
-          rtnorm(n = n, mean = mean, sd = sd, a = mean + 1.959963 * sd))[1:n],
+          rtnorm(n = n, mean = mean, sd = sd, a = mean + 1.959963 * sd)),
     size = n)
 
 }
