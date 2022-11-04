@@ -73,20 +73,21 @@ properties (Number of Monte Carlo cycles) can be chosen.</p>
 <span>  food_only <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  growing_period <span class="op">=</span> <span class="fl">180</span>,</span>
 <span>  t_res <span class="op">=</span> <span class="fl">1</span>,</span>
-<span>  traceBackVariables <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>  traceBackVariables <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  keep_c_course <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>dat</dt>
-<dd><p>List with all the input variables. This list is produced by
+<dd><p>A List with all the input variables. This list is produced by
 function <code><a href="read_fcr_input.html">read_fcr_input()</a></code> from the Excel sheets.</p></dd>
 
 
 <dt>info</dt>
-<dd><p>he table containing additional substance information loaded
-with <code><a href="additional_substanc_info.html">additional_substanc_info()</a></code></p></dd>
+<dd><p>A table containing additional substance information loaded
+with <code><a href="read_fcr_input.html">read_fcr_input()</a></code></p></dd>
 
 
 <dt>years</dt>
@@ -120,14 +121,20 @@ growth</p></dd>
 
 
 <dt>t_res</dt>
-<dd><p>Temporal resolution to be returned in the output matrix
-(no effect on the calculation). The default is 1 (every year) which can lead
-to a very large output matrix.</p></dd>
+<dd><p>Temporal resolution in days to be returned in the output matrix
+(no effect on the calculation). The default is 1 (every day) which can lead
+to a very large output matrix. The maximal reslution is 365 days, since
+every year is calculated seperately.</p></dd>
 
 
 <dt>traceBackVariables</dt>
 <dd><p>If TRUE, the variables of every simulation year are
 returned. Note: this can lead to very large lists.</p></dd>
+
+
+<dt>keep_c_course</dt>
+<dd><p>If FALSE, the course of concentration is not part of
+the output. In that case variabel t_res is meaningless.</p></dd>
 
 </dl></div>
     <div class="section level2">
