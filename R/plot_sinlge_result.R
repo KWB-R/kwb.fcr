@@ -82,15 +82,16 @@ shadingPlot <- function(
   nQuants <- nrow(quants)
   Tcol <- rgb(0,130,188, alpha = (1000/nQuants + 2), maxColorValue = 255)
 
-  plot(x = 1:x_values, y = 1:x_values, type = "n", ylim = c(ymin, ymax),
+  x <- seq_len(x_values)
+  plot(x = x, y = x, type = "n", ylim = c(ymin, ymax),
        xlab = xlab, ylab = ylab, main = main)
   # plot quantiles
   for(i in 0:(nQuants %/% 2)){
-    polygon(x = c(1:x_values, x_values:1),
+    polygon(x = c(x, rev(x)),
             y = c(quants[1+i,], rev(quants[nQuants - i,])),
             col = Tcol, border = NA)
   }
   # plot median
-  lines(x = 1:x_values, y = quants[(nQuants %/% 2) + 1,],
+  lines(x = x, y = quants[(nQuants %/% 2) + 1,],
         col = rgb(0,130,188, maxColorValue = 255), lwd = 1)
 }
