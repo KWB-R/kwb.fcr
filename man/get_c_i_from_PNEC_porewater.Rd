@@ -11,7 +11,7 @@ get_c_i_from_PNEC_porewater(dat, info, nFields)
 function \code{\link[=read_fcr_input]{read_fcr_input()}} from the Excel sheets.}
 
 \item{info}{he table containing additional substance information loaded
-with \code{\link[=additional_substanc_info]{additional_substanc_info()}}}
+with \code{\link[=read_fcr_input]{read_fcr_input()}}}
 
 \item{nFields}{Number of Monte Carlo cycles}
 }

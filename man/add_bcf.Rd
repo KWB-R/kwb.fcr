@@ -10,7 +10,7 @@ add_bcf(p, sub_info)
 \item{p}{Parameter table created with \code{\link[=oneYear_matrix]{oneYear_matrix()}}}
 
 \item{sub_info}{The table containing additional substance information loaded
-with \code{\link[=additional_substanc_info]{additional_substanc_info()}}}
+with \code{\link[=read_fcr_input]{read_fcr_input()}}}
 }
 \value{
 The Parameter table extended by a column for the bio concentration

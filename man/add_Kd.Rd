@@ -11,7 +11,7 @@ add_Kd(p, sub_info)
 must be available in p if K_d is estimated with linear regression.}
 
 \item{sub_info}{The table containing additional substance information loaded
-with \code{\link[=additional_substanc_info]{additional_substanc_info()}}}
+with \code{\link[=read_fcr_input]{read_fcr_input()}}}
 }
 \value{
 The Parameter table extended by a column for the sorption coefficient

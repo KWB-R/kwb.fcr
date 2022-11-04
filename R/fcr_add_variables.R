@@ -2,7 +2,7 @@
 #'
 #' @param p The input data table created with [read_fcr_input()]
 #' @param info Additional input data information, created with
-#' [additional_substanc_info()]
+#' [read_fcr_input()]
 #'
 #' @return
 #' The table p exetended by new variable columns needed for the risk assessment
@@ -94,7 +94,7 @@ add_variables <- function(
 #' @param p Parameter table created with [oneYear_matrix()]. Note: D_air variable
 #' must be available in p if K_d is estimated with linear regression.
 #' @param sub_info The table containing additional substance information loaded
-#' with [additional_substanc_info()]
+#' with [read_fcr_input()]
 #'
 #' @return The Parameter table extended by a column for the sorption coefficient
 #'
@@ -213,7 +213,7 @@ add_SoilWater_reverse <- function(p){
 #'
 #' @param p Parameter table created with [oneYear_matrix()]
 #' @param sub_info The table containing additional substance information loaded
-#' with [additional_substanc_info()]
+#' with [read_fcr_input()]
 #'
 #' @return The Parameter table extended by a column for the bio concentration
 #' factor.
@@ -247,7 +247,7 @@ add_bcf <- function(p, sub_info){
 #'
 #' @param p Parameter table created with [oneYear_matrix()]
 #' @param sub_info The table containing additional substance information loaded
-#' with [additional_substanc_info()]
+#' with [read_fcr_input()]
 #'
 #' @return The Parameter table extended by a column for the bio concentration
 #' factor.

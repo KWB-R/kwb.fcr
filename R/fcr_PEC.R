@@ -4,10 +4,10 @@
 #' calculated. The number of years and number of agricultural fields with different
 #' properties (Number of Monte Carlo cycles) can be chosen.
 #'
-#' @param dat List with all the input variables. This list is produced by
+#' @param dat A List with all the input variables. This list is produced by
 #' function [read_fcr_input()] from the Excel sheets.
-#' @param info he table containing additional substance information loaded
-#' with [additional_substanc_info()]
+#' @param info A table containing additional substance information loaded
+#' with [read_fcr_input()]
 #' @param years Years of fertilizer application
 #' @param nFields Number of Monte Carlo cycles
 #' @param use_mixing_factor Not working yet! If TRUE, porewater is diluted by pollutant free
@@ -20,11 +20,14 @@
 #' multiplied by 2 to compensate the disregard of water consumption
 #' @param growing_period Numeric value specifiyng the number of days with plant
 #' growth
-#' @param t_res Temporal resolution to be returned in the output matrix
-#' (no effect on the calculation). The default is 1 (every year) which can lead
-#' to a very large output matrix.
+#' @param t_res Temporal resolution in days to be returned in the output matrix
+#' (no effect on the calculation). The default is 1 (every day) which can lead
+#' to a very large output matrix. The maximal reslution is 365 days, since
+#' every year is calculated seperately.
 #' @param traceBackVariables If TRUE, the variables of every simulation year are
 #' returned. Note: this can lead to very large lists.
+#' @param keep_c_course If FALSE, the course of concentration is not part of
+#' the output. In that case variabel t_res is meaningless.
 #'
 #' @return
 #' List with
@@ -42,7 +45,8 @@
 #'
 longterm_PEC <- function(
   dat, info, years, nFields, use_mixing_factor = FALSE, PNECwater_c_i = FALSE,
-  food_only = TRUE, growing_period = 180, t_res = 1, traceBackVariables = FALSE
+  food_only = TRUE, growing_period = 180, t_res = 1, traceBackVariables = FALSE,
+  keep_c_course = TRUE
 ){
 
   c_i <- if(PNECwater_c_i){
@@ -99,6 +103,9 @@ longterm_PEC <- function(
       c_course[[year + 1]] <-
         one_year(p = p, growing_period = growing_period, t_res = t_res)
       c_i <- c_course[[year + 1]][nrow(c_course[[year + 1]]),]
+      if(!keep_c_course){
+        c_course[[year + 1]] <- NULL
+      }
 
     { # Update status bar
       status_new <- floor(year/years * 100)
@@ -256,7 +263,7 @@ get_PEC_porewater <- function(p, d){
 #' @param dat List with all the input variables. This list is produced by
 #' function [read_fcr_input()] from the Excel sheets.
 #' @param info he table containing additional substance information loaded
-#' with [additional_substanc_info()]
+#' with [read_fcr_input()]
 #' @param nFields Number of Monte Carlo cycles
 #'
 #' @details

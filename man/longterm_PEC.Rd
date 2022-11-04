@@ -14,15 +14,16 @@ longterm_PEC(
   food_only = TRUE,
   growing_period = 180,
   t_res = 1,
-  traceBackVariables = FALSE
+  traceBackVariables = FALSE,
+  keep_c_course = TRUE
 )
 }
 \arguments{
-\item{dat}{List with all the input variables. This list is produced by
+\item{dat}{A List with all the input variables. This list is produced by
 function \code{\link[=read_fcr_input]{read_fcr_input()}} from the Excel sheets.}
 
-\item{info}{he table containing additional substance information loaded
-with \code{\link[=additional_substanc_info]{additional_substanc_info()}}}
+\item{info}{A table containing additional substance information loaded
+with \code{\link[=read_fcr_input]{read_fcr_input()}}}
 
 \item{years}{Years of fertilizer application}
 
@@ -42,12 +43,16 @@ multiplied by 2 to compensate the disregard of water consumption}
 \item{growing_period}{Numeric value specifiyng the number of days with plant
 growth}
 
-\item{t_res}{Temporal resolution to be returned in the output matrix
-(no effect on the calculation). The default is 1 (every year) which can lead
-to a very large output matrix.}
+\item{t_res}{Temporal resolution in days to be returned in the output matrix
+(no effect on the calculation). The default is 1 (every day) which can lead
+to a very large output matrix. The maximal reslution is 365 days, since
+every year is calculated seperately.}
 
 \item{traceBackVariables}{If TRUE, the variables of every simulation year are
 returned. Note: this can lead to very large lists.}
+
+\item{keep_c_course}{If FALSE, the course of concentration is not part of
+the output. In that case variabel t_res is meaningless.}
 }
 \value{
 List with

@@ -16,10 +16,11 @@
 #' sheet (prefix before "_sheet.xslx). If fertilizerName = "none", fertilizer
 #' application and pollutant concentration will be set to 0.
 #'
-#' @return List of one row data frames.
-#' The length equals the number of non NA input variables. Data frames include
-#' information about distribution type, distribution parameters, site specific
-#' character and a unique variable ID
+#' @return
+#' List of two items names "dat" and "info" and containing all the
+#' input variable data (information about distribution type, distribution
+#' parameters, type of variability and a unique variable ID) and additional
+#' information of how to simulate substance behavior.
 #'
 #' @export
 #' @importFrom readxl read_excel
@@ -89,26 +90,4 @@ read_fcr_input <- function(
   }
   list("dat" = split(df_in, df_in$parameter),
        "info" = info)
-}
-
-#' Read Additional pollutant information
-#'
-#' Reads the sheet "additional_infos" from the pollutant Excel file. The
-#' pollutant excel files must be named "'pollutantName'_sheet.xlsx".
-#'
-#' @param path Path of both Excel files
-#' @param pollutantName Name of Pollutant as in filename
-#'
-#' @return
-#' A table containing the addiational information.
-#'
-#' @export
-#' @importFrom readxl read_excel
-#'
-additional_substanc_info <- function(
-  path, pollutantName
-){
-  readxl::read_excel(
-    path = file.path(path, paste0(pollutantName, "_sheet.xlsx")),
-    sheet = "additional_infos", col_names = TRUE, na = "NA")
 }

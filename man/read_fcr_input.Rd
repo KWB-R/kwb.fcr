@@ -21,10 +21,10 @@ sheet (prefix before "_sheet.xslx). If fertilizerName = "none", fertilizer
 application and pollutant concentration will be set to 0.}
 }
 \value{
-List of one row data frames.
-The length equals the number of non NA input variables. Data frames include
-information about distribution type, distribution parameters, site specific
-character and a unique variable ID
+List of two items names "dat" and "info" and containing all the
+input variable data (information about distribution type, distribution
+parameters, type of variability and a unique variable ID) and additional
+information of how to simulate substance behavior.
 }
 \description{
 Reads Excel files with environmnetal proporties and substance coefficents.

@@ -10,7 +10,7 @@ add_variables(p, info)
 \item{p}{The input data table created with \code{\link[=read_fcr_input]{read_fcr_input()}}}
 
 \item{info}{Additional input data information, created with
-\code{\link[=additional_substanc_info]{additional_substanc_info()}}}
+\code{\link[=read_fcr_input]{read_fcr_input()}}}
 }
 \value{
 The table p exetended by new variable columns needed for the risk assessment
