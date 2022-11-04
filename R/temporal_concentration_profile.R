@@ -35,7 +35,7 @@ temp_c_profile <- function(
   mat_out <- p * c_i + (1 - p) * conti_input / output_rate
 
   dimnames(mat_out) <- list(
-    paste0("n", 1:n),
+    paste0("n", seq_len(n)),
     paste0("t", times + t_beg)
   )
 

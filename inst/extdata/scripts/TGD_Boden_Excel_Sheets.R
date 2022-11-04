@@ -125,7 +125,7 @@ TGD_model <- function(
   Env <- Env[,c(1,4:8)]
   colnames(Sub) <- colnames(Env)
   Input <- rbind(Env, Sub)
-  Input$pID <- 1:nrow(Input)
+  Input$pID <- seq_len(nrow(Input))
 
   # select fertilizer
   all_fert <- which(grepl(pattern = "_fert_", x = Input$Parameter))
@@ -207,7 +207,7 @@ TGD_model <- function(
   MCS$c30 <- data.frame(matrix(nrow = years, ncol = runs))
   MCS$c30_leach <- data.frame(matrix(nrow = years, ncol = runs))
 
-  for(year in 1:years){
+  for(year in seq_len(years)){
 
     if(show_progress == TRUE){
       rect(xleft = 0, xright = progress[year],
