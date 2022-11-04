@@ -2,7 +2,8 @@ input_path <- "Y:/WWT_Department/Projects/NextGen/Data-Work packages/WP2/QCRA/fc
 
 siteName <- "germanMix"
 pollutantNames <- c("as", "cd", "cr", "cu", "hg", "ni", "pb", "zn", "benzo", "pcdd")
-pollutantNames <-  "pcdd"
+pollutantNames <-  "cd"
+
 output <- list()
 for(pollutantName in pollutantNames){
 
@@ -17,6 +18,7 @@ for(pollutantName in pollutantNames){
                                     years = 1,
                                     nFields = 100000,
                                     use_mixing_factor = FALSE,
+                                    PNECwater_c_i = TRUE,
                                     food_only = TRUE,
                                     growing_period = 180,
                                     t_res = 10,
@@ -24,9 +26,6 @@ for(pollutantName in pollutantNames){
 
   output[[pollutantName]] <- fcr_out0
 }
-
-colnames(output$benzo$model_variables)
-
 
 ################################### Sorption ###################################
 
@@ -41,13 +40,13 @@ sName <- pollutantNames[1]
   par(mar = c(4.1, 2.1, 2.1, 0.1))
   hist(x = v,
        col = rgb(0,112,150, maxColorValue = 255),
-       breaks = 30, xlim = c(0,8), main = "Sorption",
+       breaks = 30, xlim = c(-2,8), main = "Sorption",
        xlab = bquote({log[10](K[d])}), border = "white",  yaxt = "n", ylab = "")
   abline(v = par("usr")[1])
   abline(h = par("usr")[3])
   mtext(text = "Frequency", side = 2, line = 0.4)
-  legend("topleft", legend = paste0(signif(stat, 2), " (",names(stat), ")"),
-         bty = "n", cex = 0.8)
+  legend("topright", legend = paste0(signif(stat, 2), " (",names(stat), ")"),
+         bty = "n", cex = 1)
 }
 
 
@@ -61,7 +60,7 @@ sName <- pollutantNames[1]
   par(mar = c(4.1, 2.1, 2.1, 0.1))
   hist(x = v,
        col = rgb(0,112,150, maxColorValue = 255),
-       breaks = 800, xlim = c(0,0.5), main = "Plant Uptake",
+       breaks = 500000, xlim = c(0,5), main = "Plant Uptake",
        xlab = bquote({BCF}), border = "white",  yaxt = "n", ylab = "")
   abline(v = par("usr")[1])
   abline(h = par("usr")[3])
@@ -92,7 +91,7 @@ sName <- pollutantNames[1]
   hist(x = v,
        col = rgb(0,112,150, maxColorValue = 255),
        breaks = 200, main = "Atmospheric Deposition",
-       xlab = bquote(Deposition~~(over(g, ha%*%a))), xlim = c(0, 0.001),
+       xlab = bquote(Deposition~~(over(g, ha%*%a))), xlim = c(0, 0.002),
        border = "white", yaxt = "n", ylab = "")
   abline(v = par("usr")[1])
   abline(h = par("usr")[3])
@@ -125,7 +124,7 @@ sName <- pollutantNames[1]
   abline(v = par("usr")[1])
   abline(h = par("usr")[3])
   mtext(text = "Frequency", side = 2, line = 0.4)
-  legend("topright", legend = paste0(signif(stat, 2), " (",names(stat), ")"),
+  legend("topleft", legend = paste0(signif(stat, 2), " (",names(stat), ")"),
          bty = "n", cex = 1)
 }
 
@@ -145,8 +144,8 @@ sName <- pollutantNames[1]
   dev.new(noRStudioGD = TRUE, width = 5.36, height = 3.09)
   par(mar = c(4.1, 2.1, 2.1, 0.1))
   hist(x = v,
-       col = rgb(0,112,150, maxColorValue = 255), xlim = c(0,30000),
-       breaks = 100, main = "Biodegradation",
+       col = rgb(0,112,150, maxColorValue = 255), xlim = c(0,410000),
+       breaks = 3000, main = "Biodegradation",
        xlab = bquote(Half-life~'in'~d),
        border = "white", yaxt = "n", ylab = "")
   abline(v = par("usr")[1])
@@ -156,3 +155,88 @@ sName <- pollutantNames[1]
          bty = "n", cex = 1)
 }
 
+#################### initial concentration for groundwater simulation
+sName <- pollutantNames[1]
+{
+  print(sName)
+  vName <- "c_i"
+  v <- output[[sName]]$model_variables[,vName]
+
+  stat <- summary(v)
+  dev.new(noRStudioGD = TRUE, width = 5.36, height = 3.09)
+  par(mar = c(4.1, 2.1, 2.1, 0.1))
+  hist(x = v,
+       col = rgb(0,112,150, maxColorValue = 255),
+       breaks = 100, xlim = c(0,2), main = "Initial Concentration",
+       xlab = "Concentration in mg/kg soil", border = "white",  yaxt = "n", ylab = "")
+  abline(v = par("usr")[1])
+  abline(h = par("usr")[3])
+  mtext(text = "Frequency", side = 2, line = 0.4)
+
+  abline(v = output[[sName]]$model_variables[1,"PNEC_soil"],
+         col = rgb(197, 210, 70, maxColorValue = 255), lwd = 3)
+  text(x = output[[sName]]$model_variables[1,"PNEC_soil"], y = par("usr")[4]/2,
+       labels = bquote(PNEC[Soil]), cex = 0.8, adj = c(-0.2, 1))
+}
+
+
+#################### pH ######
+sName <- pollutantNames[1]
+{
+  print(sName)
+  vName <- "pH"
+  v <- output[[sName]]$model_variables[,vName]
+
+  stat <- summary(v)
+  dev.new(noRStudioGD = TRUE, width = 5.36, height = 3.09)
+  par(mar = c(4.1, 2.1, 2.1, 0.1))
+  hist(x = v,
+       col = rgb(0,112,150, maxColorValue = 255),
+       breaks = 20, xlim = c(2,12), main = "Soil pH-Value",
+       xlab = "pH", border = "white",  yaxt = "n", ylab = "")
+  abline(v = par("usr")[1])
+  abline(h = par("usr")[3])
+  mtext(text = "Frequency", side = 2, line = 0.4)
+  legend("topright", legend = paste0(signif(stat, 2), " (",names(stat), ")"),
+         bty = "n", cex = 1)
+}
+
+sName <- pollutantNames[1]
+{
+  print(sName)
+  vName <- "f_oc"
+  v <- output[[sName]]$model_variables[,vName] * 100
+
+  stat <- summary(v)
+  dev.new(noRStudioGD = TRUE, width = 5.36, height = 3.09)
+  par(mar = c(4.1, 2.1, 2.1, 0.1))
+  hist(x = v,
+       col = rgb(0,112,150, maxColorValue = 255),
+       breaks = 40, xlim = c(0,12), main = "Soil Organic Carbon",
+       xlab = "Organic carbon content in %", border = "white",  yaxt = "n", ylab = "")
+  abline(v = par("usr")[1])
+  abline(h = par("usr")[3])
+  mtext(text = "Frequency", side = 2, line = 0.4)
+  legend("topright", legend = paste0(signif(stat, 2), " (",names(stat), ")"),
+         bty = "n", cex = 1)
+}
+
+sName <- pollutantNames[1]
+{
+  print(sName)
+  vName <- "rain"
+  v <- output[[sName]]$model_variables[,vName] * 365 * 1000
+
+  stat <- summary(v)
+  dev.new(noRStudioGD = TRUE, width = 5.36, height = 3.09)
+  par(mar = c(4.1, 2.1, 2.1, 0.1))
+  hist(x = v,
+       col = rgb(0,112,150, maxColorValue = 255),
+       breaks = 40, xlim = c(0,3000), main = "Precipitation",
+       xlab = "Yearly precipitation in mm/a", border = "white",  yaxt = "n", ylab = "")
+  abline(v = par("usr")[1])
+  abline(h = par("usr")[3])
+  mtext(text = "Frequency", side = 2, line = 0.4)
+  legend("topright", legend = paste0(signif(stat, 2), " (",names(stat), ")"),
+         bty = "n", cex = 1)
+}

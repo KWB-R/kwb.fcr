@@ -16,6 +16,7 @@ fcr_out0 <- kwb.fcr::longterm_PEC(dat = dat_0$dat,
                                  years = 100,
                                  nFields = 10000,
                                  use_mixing_factor = FALSE,
+                                 PNECwater_c_i = TRUE,
                                  food_only = TRUE,
                                  growing_period = 180,
                                  t_res = 10,
@@ -27,6 +28,7 @@ fcr_out <- kwb.fcr::longterm_PEC(dat = dat_in$dat,
                     years = 100,
                     nFields = 10000,
                     use_mixing_factor = FALSE,
+                    PNECwater_c_i = TRUE,
                     food_only = TRUE,
                     growing_period = 180,
                     t_res = 10,
@@ -46,17 +48,21 @@ abline(h = 1, lty = "dotted")
 
 kwb.fcr::shadingPlot(
   mat_xRow = fcr_out$PEC[["porewater"]] / fcr_out$model_variables[,"PNEC_water"],
-  ymin = 0, ymax = 20, xlab = "Years", ylab = "Risk Quotient",
+  ymin = 0, ymax = 5, xlab = "Years", ylab = "Risk Quotient",
   resolution = 0.01)
+abline(h = 1, lty = "dotted")
+
+kwb.fcr::shadingPlot(
+  mat_xRow = fcr_out0$PEC[["porewater"]] / fcr_out$model_variables[,"PNEC_water"],
+  ymin = 0, ymax = 5, xlab = "Years", ylab = "Risk Quotient",
+  resolution = 0.01)
+abline(h = 1, lty = "dotted")
+
 
 kwb.fcr::CumSumSoil(
-  v0 = fcr_out$model_variables[,"c_i"] / fcr_out$model_variables[,"PNEC_soil"],
+  v0 = fcr_out0$PEC[["soil"]][100,] / fcr_out$model_variables[,"PNEC_soil"],
   v = fcr_out$PEC[["soil"]][100,] / fcr_out$model_variables[,"PNEC_soil"],
   year_x = 100, xmax = 1000)
-kwb.fcr::CumSumSoil(
-  v0 = fcr_out$model_variables[,"c_water"] / fcr_out$model_variables[,"PNEC_water"],
-  v = fcr_out$PEC[["porewater"]][100,] / fcr_out$model_variables[,"PNEC_water"],
-  year_x = 100, xmax = 10000)
 kwb.fcr::CumSumSoil(
   v0 = fcr_out0$PEC[["porewater"]][100,] / fcr_out$model_variables[,"PNEC_water"],
   v = fcr_out$PEC[["porewater"]][100,] / fcr_out$model_variables[,"PNEC_water"],
