@@ -1,0 +1,6 @@
+germany.xlsx
+  Region: Average of German agricultural soil and German climate
+  Description: 
+    The environmental properties as described in Phorwärts. Only
+    exceptions are extended uniform distributions for pH and 
+    groundwater velocity, instead of normal uniform distribution.

@@ -34,9 +34,9 @@ read_fcr_input <- function(
   if(!any(dir(substance_path) == paste0(pollutantName, ".xlsx"))){
     stop(paste0("No pollutant called '", pollutantName, "'"))
   }
-  site_path <- file.path(input_path, "sites")
+  site_path <- file.path(input_path, "environments")
   if(!any(dir(site_path) == paste0(siteName, ".xlsx"))){
-    stop(paste0("No site called '", siteName, "'"))
+    stop(paste0("No environment called '", siteName, "'"))
   }
 
   substance <- readxl::read_excel(
