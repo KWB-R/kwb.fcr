@@ -58,6 +58,7 @@ get_risk <- function(
 #' @export
 #'
 risk_aggregation <- function(df_risk){
+
   relevant_increases <- df_risk$riskIncrease[df_risk$highRisk]
   delta_RQ <- mean(relevant_increases)
 
@@ -65,7 +66,8 @@ risk_aggregation <- function(df_risk){
   highest_5 <- df_risk$FertRisk[df_risk$FertRisk >= q_relevant]
   Risk_max <- mean(highest_5)
 
-  list("delta_RQ" = round(delta_RQ, 3),
+  list("n_highRisk" = sum(df_risk$highRisk),
+       "delta_RQ" = round(delta_RQ, 3),
        "Risk_max" = round(Risk_max, 1),
        "Risk" = risk_interpretation(delta_RQ = delta_RQ, risk_max = Risk_max))
 }
@@ -112,7 +114,7 @@ risk_interpretation <- function(
     "risk" = interpretation)
 
   r_table$risk[r_table$Var1 == delta_RQ_limits[i] &
-    r_table$Var2 == risk_max_limits[j]]
+                 r_table$Var2 == risk_max_limits[j]]
 }
 
 
