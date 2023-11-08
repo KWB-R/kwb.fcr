@@ -91,6 +91,9 @@
     <loc>https://kwb-r.github.io/kwb.fcr/reference/get_c_i_from_PNEC_porewater.html</loc>
   </url>
   <url>
+    <loc>https://kwb-r.github.io/kwb.fcr/reference/get_risk.html</loc>
+  </url>
+  <url>
     <loc>https://kwb-r.github.io/kwb.fcr/reference/index.html</loc>
   </url>
   <url>
@@ -113,6 +116,12 @@
   </url>
   <url>
     <loc>https://kwb-r.github.io/kwb.fcr/reference/read_fcr_input.html</loc>
+  </url>
+  <url>
+    <loc>https://kwb-r.github.io/kwb.fcr/reference/risk_aggregation.html</loc>
+  </url>
+  <url>
+    <loc>https://kwb-r.github.io/kwb.fcr/reference/risk_interpretation.html</loc>
   </url>
   <url>
     <loc>https://kwb-r.github.io/kwb.fcr/reference/rlderived.html</loc>
