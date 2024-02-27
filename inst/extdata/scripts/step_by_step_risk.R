@@ -6,26 +6,26 @@ fertilizerName <- "sludgePhorw_mean"
 pollutantName <- "zn"
 
 groundwater_assessment <- TRUE
-nFields <- 100
-years <- 100
+nFields <- 100000
+years <- 10
 
 # scenario without fertilizer --------------------------------------------------
-dat_wo <- kwb.fcr::read_fcr_input(input_path = input_path,
-                                  pollutantName = pollutantName,
-                                  siteName = siteName,
-                                  fertilizerName = "none")
-# longterm calculation
-fcr_wo <- kwb.fcr::longterm_PEC(dat = dat_wo$dat,
-                                info = dat_wo$info,
-                                years = years,
-                                nFields = nFields,
-                                use_mixing_factor = FALSE,
-                                PNECwater_c_i = groundwater_assessment,
-                                food_only = TRUE,
-                                growing_period = 180,
-                                t_res = 365 * 100,
-                                traceBackVariables = FALSE,
-                                keep_c_course = FALSE)
+# dat_wo <- kwb.fcr::read_fcr_input(input_path = input_path,
+#                                   pollutantName = pollutantName,
+#                                   siteName = siteName,
+#                                   fertilizerName = "none")
+# # longterm calculation
+# fcr_wo <- kwb.fcr::longterm_PEC(dat = dat_wo$dat,
+#                                 info = dat_wo$info,
+#                                 years = years,
+#                                 nFields = nFields,
+#                                 use_mixing_factor = FALSE,
+#                                 PNECwater_c_i = groundwater_assessment,
+#                                 food_only = TRUE,
+#                                 growing_period = 180,
+#                                 t_res = 365 * 100,
+#                                 traceBackVariables = FALSE,
+#                                 keep_c_course = FALSE)
 
 # scenario with fertilizer --------------------------------------------------
 dat <- kwb.fcr::read_fcr_input(input_path = input_path,
