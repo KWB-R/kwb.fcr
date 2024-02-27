@@ -23,15 +23,34 @@
 #'
 #' @export
 Kd_regression <- function(
-  constant, beta_ph, beta_org, beta_conc, regType = "direct", pH, org_c, conc
+    constant, beta_ph, beta_org, beta_conc, regType = "direct", pH, org_c, conc
 ){
+
+  exponents <- (beta_ph * pH + beta_org * log10(org_c) + beta_conc * log10(conc) + constant)
+
   reg_out <- # either this is K_d (-> direct in L/kg) or this is the concentration in porewater (-> indirect in µg/L)
-    10^(beta_ph * pH + beta_org * log10(org_c) + beta_conc * log10(conc) + constant)
-  if(regType == "direct"){
-    reg_out
-  } else if(regType == "indirect"){
-    conc * 1000 / reg_out
+    10^exponents
+
+  if(regType == "indirect"){
+    reg_out <- conc * 1000 / reg_out
   }
+
+  a <- quantile(pH, c(0.01, 0.05, 0.1, 0.25, 0.5, 0.75, 0.9, 0.95, 0.99))
+  b <- quantile(org_c, c(0.01, 0.05, 0.1, 0.25, 0.5, 0.75, 0.9, 0.95, 0.99))
+  c <- quantile(log10(org_c), c(0.01, 0.05, 0.1, 0.25, 0.5, 0.75, 0.9, 0.95, 0.99))
+  d <- quantile(beta_ph, c(0.01, 0.05, 0.1, 0.25, 0.5, 0.75, 0.9, 0.95, 0.99))
+  e <- quantile(beta_org, c(0.01, 0.05, 0.1, 0.25, 0.5, 0.75, 0.9, 0.95, 0.99))
+  f <- quantile(beta_conc, c(0.01, 0.05, 0.1, 0.25, 0.5, 0.75, 0.9, 0.95, 0.99))
+  g <- quantile(constant, c(0.01, 0.05, 0.1, 0.25, 0.5, 0.75, 0.9, 0.95, 0.99))
+  h <- quantile(exponents, c(0.01, 0.05, 0.1, 0.25, 0.5, 0.75, 0.9, 0.95, 0.99))
+  i <- quantile(reg_out, c(0.01, 0.05, 0.1, 0.25, 0.5, 0.75, 0.9, 0.95, 0.99))
+
+  return(reg_out)
+}
+
+summary_ <- function(series){
+  q <- quantile(series, c(0.01, 0.05, 0.1, 0.25, 0.5, 0.75, 0.9, 0.95, 0.99))
+  message(q)
 }
 
 #' Estimate the bio concentration factor in two different ways
