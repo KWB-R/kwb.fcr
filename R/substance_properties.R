@@ -45,6 +45,17 @@ Kd_regression <- function(
   h <- quantile(exponents, c(0.01, 0.05, 0.1, 0.25, 0.5, 0.75, 0.9, 0.95, 0.99))
   i <- quantile(reg_out, c(0.01, 0.05, 0.1, 0.25, 0.5, 0.75, 0.9, 0.95, 0.99))
 
+  message(a)
+  message(b)
+  message(d)
+  message(d)
+  message(e)
+  message(f)
+  message(g)
+  message(h)
+  message(i)
+
+
   return(reg_out)
 }
 
